@@ -24,57 +24,26 @@
             </v-btn>
         </div>
         <v-list light class="remainder-list">
-            <v-list-item class="remainder">
-                <v-radio/>
-                <div class="remainder-contents">
-                    花子と会う
-                </div>
-                <div class="remainder-date">
-                    2020/12/01 18:00
-                </div>
-            </v-list-item>
-            <v-list-item class="remainder">
-                <v-radio/>
-                <div class="remainder-contents">
-                    山田とご飯
-                </div>
-                <div class="remainder-date">
-                    2020/12/03 19:00
-                </div>
-            </v-list-item>
-            <v-list-item class="remainder">
-                <v-radio/>
-                <div class="remainder-contents">
-                    はなとあつ森
-                </div>
-                <div class="remainder-item">
-                    2020/12/04 20:00
-                </div>
-            </v-list-item>
-            <v-list-item class="remainder">
-                <v-radio/>
-                <div class="remainder-contents">
-                    あおいと会議
-                </div>
-                <div class="remainder-date">
-                    2020/12/05 11:00
-                </div>
-            </v-list-item>
-            <v-list-item class="remainder">
-                <v-radio/>
-                <div class="remainder-contents">
-                    上北と女子会
-                </div>
-                <div class="remainder-date">
-                    2020/12/09 20:00
-                </div>
-            </v-list-item>            
+            <remainder v-for="remainder in remainders" :key="remainder.id" :ref="remainder"/>
         </v-list>
     </div>
 </template>
 <script lang="ts">
 import Vue from 'vue'
+import Remainder from './Remainder.vue'
+
 export default Vue.extend({
+    components: {
+        Remainder
+    },
+    created() {
+        this.$store.dispatch('remainder/get_all', 1);
+    },
+    computed: {
+        remainders() {
+            return this.$store.state.remainder.list
+        }
+    },
     methods: {
         delete() {
             alert('削除してよろしいですか？');
