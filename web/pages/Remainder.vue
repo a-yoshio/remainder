@@ -31,8 +31,8 @@ export default {
   data() {
     return {};
   },
-  asyncData() { // このページにアクセスが来たときに、実行される。
-    remainderModule.fetchAll();// storeモジュールのmutation関数を実行
+  async asyncData() { // このページにアクセスが来たときに、実行される。
+    return await remainderModule.getAll(1);// storeモジュールのmutation関数を実行
   },
   computed: {
     remainders() {

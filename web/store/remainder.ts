@@ -1,5 +1,6 @@
-import { Module, VuexModule, Mutation } from 'vuex-module-decorators'
+import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators'
 import { Remainder as RemainderEntity } from '@/entitys/Remainder'
+import axios from 'axios';
 
 @Module({ name: 'remainder', namespaced: true, stateFactory: true })
 export default class RemainderModule extends VuexModule {
@@ -7,10 +8,17 @@ export default class RemainderModule extends VuexModule {
     remainders: Array<RemainderEntity> = []
     // mutation
     @Mutation
-    public fetchAll() {
-        const test = new RemainderEntity(1, 1, '味噌汁を飲む', 2, new Date(2020, 11, 12, 10, 20, 22), false)
-        this.remainders.push(test)
-        console.log(this.remainders)
+    public setRemainders(dataList: Array<RemainderEntity>) {
+        for (let i:number = 0; i < dataList.length; i++) {
+            this.remainders.push(dataList[i])
+        }
+    }
+    // action
+    @Action
+    public async getAll(userId: number) {
+        const response = await axios.get(process.env.apiURL + 'remainder/'+ userId)
+        const remainders: Array<RemainderEntity> = response.data.remainder_list
+        this.setRemainders(remainders)
     }
     // getter
     // get name() {}
