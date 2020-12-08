@@ -1,4 +1,4 @@
-import { Module, VuexModule, Action, Mutation } from 'vuex-module-decorators'
+import { Module, VuexModule, Mutation } from 'vuex-module-decorators'
 import { Remainder as RemainderEntity } from '@/entitys/Remainder'
 
 @Module({ name: 'remainder', namespaced: true, stateFactory: true })

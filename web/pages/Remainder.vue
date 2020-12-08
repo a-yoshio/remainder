@@ -23,7 +23,6 @@
 </template>
 
 <script lang="ts">
-import { Context } from "@nuxt/types";
 import { Remainder } from "@/entitys/remainder";
 import { getModule } from "vuex-module-decorators";
 import { remainderModule } from "@/store";
@@ -32,12 +31,12 @@ export default {
   data() {
     return {};
   },
-  asyncData() {
-    remainderModule.fetchAll();
+  asyncData() { // このページにアクセスが来たときに、実行される。
+    remainderModule.fetchAll();// storeモジュールのmutation関数を実行
   },
   computed: {
     remainders() {
-      return remainderModule.remainders;
+      return remainderModule.remainders;// storeモジュールのstateを取得。
     },
   },
 };
