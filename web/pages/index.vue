@@ -1,18 +1,14 @@
 <template>
   <v-row justify="center" align="center">
-    <remainders/>
+    <nuxt-link class="btn btn-outline btn-large btn-info" to="/top">
+      Enter
+      <span class="ml-2">→</span>
+    </nuxt-link>
   </v-row>
 </template>
+<script lang="ts">
+import { Component, Vue } from 'nuxt-property-decorator'
 
-<script>
-import Remainders from '~/components/remainder/Remainders.vue'
-import Axios from 'axios'
 
-Axios.defaults.baseURL = process.env.REMAINDER_API_URL
-
-export default {
-  components: {
-    Remainders
-  }
-}
+export default class IndexPage extends Vue {}
 </script>
