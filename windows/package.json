@@ -1,0 +1,15 @@
+{
+ "name": "remainder_for_windows",
+ "build": {
+   "appId": "your.id",
+   "mac": {
+     "category": "your.app.category.type"
+   }
+  },
+  "scripts": {
+   "pack": "electron-builder --dir",
+   "dist": "electron-builder"
+ }
+}
+
+
