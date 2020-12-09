@@ -23,7 +23,6 @@
 </template>
 
 <script lang="ts">
-import { Remainder } from "@/entitys/remainder";
 import { getModule } from "vuex-module-decorators";
 import { remainderModule } from "@/store";
 

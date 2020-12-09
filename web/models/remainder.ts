@@ -1,4 +1,4 @@
-export class Remainder {
+export class RemainderModel {
     id: number;
     contents: string;
     user_id: number;

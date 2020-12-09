@@ -1,23 +1,23 @@
-import axios  from 'axios';
-import { Remainder } from '../models/remainder';
+import { RemainderModel } from '../models/Remainder';
+import { BaseRepository } from './BaseRepository';
 
-export class RemainderRepository {
-    path: string;
+export class RemainderRepository extends BaseRepository{
     constructor() {
-        this.path = '/remainder';
+        super('/remainder')
     }
 
-    async get_all(user_id: number) {
-        try {
-            const url = this.path + '/' + user_id.toString();
-            const result = await axios.get(url)
-            return result.data.remainder_list.map((remainder_obj: object) => this.convert_object(remainder_obj))
-        } catch (error) {
-            console.error(error);
+    async selectFromUserId(userId: number): Promise<Array<RemainderModel>> {
+        const response = await super.get(userId.toString())
+        const remainderData = response.data.remainder_list
+        const remaiders: Array<RemainderModel> = []
+        for(let i = 0; i < remainderData.length; i++) {
+            remaiders.push(this.convertObject(remainderData[i]))
         }
+        return remaiders
     }
-    private convert_object(obj: any) {
-        return new Remainder(obj.id, 
+    private convertObject(obj: any): RemainderModel {
+        return new RemainderModel(
+            obj.id, 
             obj.contents,
             obj.user_id,
             obj.tag_id,
