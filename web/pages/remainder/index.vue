@@ -1,5 +1,17 @@
 <template>
   <v-row>
+  <v-btn
+    block
+    depressed
+    elevation="2"
+    raised
+    rounded
+    color="accent"
+    to="/remainder/regist"
+    nuxt
+    >
+    + Create New Remainder
+    </v-btn>
     <v-list subheader two-line>
       <v-list-item v-for="(remainder, index) in remainders" :key="index">
         <v-list-item-avatar>
@@ -19,14 +31,18 @@
         </v-list-item-action>
       </v-list-item>
     </v-list>
+    
   </v-row>
 </template>
 
 <script lang="ts">
-import { getModule } from "vuex-module-decorators";
-import { remainderModule } from "@/store";
+import { getModule } from "vuex-module-decorators"
+import { remainderModule } from "@/store"
 
 export default {
+  components: {
+
+  },
   data() {
     return {};
   },
