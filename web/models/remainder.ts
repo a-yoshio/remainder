@@ -1,11 +1,14 @@
-export class RemainderModel {
-    id: number;
-    contents: string;
+import { BaseModel } from "./BaseModel";
+
+export class RemainderModel extends BaseModel{
+    id?: number;
+    contents: String;
     user_id: number;
     tag_id: number;
     datetime: Date;
     complete: boolean;
-    constructor(id: number, contents: string, user_id: number, tag_id: number, datetime: Date, complete: boolean) {
+    constructor(contents: String, user_id: number, tag_id: number, datetime: Date, complete: boolean, id?: number) {
+        super()
         this.id = id;
         this.contents = contents;
         this.user_id = user_id

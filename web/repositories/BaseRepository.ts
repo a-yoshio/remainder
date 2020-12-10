@@ -1,7 +1,6 @@
-import { ReporitoryInterface } from "./RepositoryInterface";
 import axios, { AxiosPromise }  from 'axios';
 
-export class BaseRepository implements ReporitoryInterface{
+export class BaseRepository {
     baseUrl: String;
     url: String;
 
@@ -18,7 +17,7 @@ export class BaseRepository implements ReporitoryInterface{
         return accessUrl as string
     }
 
-    public async get(path?: String, param?: Map<String, String>): Promise<AxiosPromise<any>> {      
+    public async get(param?: Map<String, String>, path?: String): Promise<AxiosPromise<any>> {      
         try {
             const response = await axios.get(this.createAccessUrl(path), {
                 params: param
@@ -29,31 +28,23 @@ export class BaseRepository implements ReporitoryInterface{
         }
     }
     
-    public post(path?: String, param?: Map<String, String>){
-        axios.post(this.createAccessUrl(path), {
-            params: param
-        })
-        .then((response) => {
-
-        })
-        .catch((error) => {
+    public async post(param?: Map<String, String>, path?: String): Promise<Boolean>{
+        try {
+            await axios.post(this.createAccessUrl(path), {
+                params: param
+            })
+            return true
+        } catch(error) {
             throw new Error('[post]server access error: ' + error)
-        })
-        return true
+        }
     }
 
-    public delete(path?: String, param?: Map<String, String>){
-        axios.delete(this.createAccessUrl(path), {
-            params: param
-        })
-        .then((response) => {
-
-        })
-        .catch((error) => {
+    public async delete(path: String): Promise<Boolean>{
+        try {
+            await axios.delete(this.createAccessUrl(path))
+            return true
+        } catch (error) {
             throw new Error('[post]server access error: ' + error)
-        })
-        return true
+        }
     }
-    
-
 }

@@ -1,6 +1,6 @@
 import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators'
 import { RemainderModel } from '@/models/Remainder'
-import { getAllRemainders } from '@/services/RemainderService'
+import { getAll, regist, update } from '@/services/RemainderService'
 
 @Module({ name: 'remainder', namespaced: true, stateFactory: true })
 export default class RemainderModule extends VuexModule {
@@ -16,9 +16,20 @@ export default class RemainderModule extends VuexModule {
     // action
     @Action
     public async getAll(userId: number) {
-        const remainders = await getAllRemainders(userId)
+        const remainders = await getAll(userId)
         this.setRemainders(remainders)
     }
+    public async regist(user_id: number, contents: String, tag_id: number, datetime: Date): Promise<Boolean> {
+        return await regist(user_id, contents, tag_id, datetime)
+    }
+
+    public async update(userId: number, contents: String, tagId: number, datetime: Date, complete: boolean, remainderId: number) {
+        return await update(userId, contents, tagId, datetime, complete, remainderId)
+    }
+
+    // public async delete(remainderId: number) {
+    //     return await deleteRemainder(remainderId)
+    // }
     // getter
     // get name() {}
 }
