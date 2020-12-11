@@ -16,7 +16,8 @@
     "babel-plugin-transform-decorators": "^6.24.1",
     "core-js": "^3.6.5",
     "date-fns": "^2.16.1",
-    "nuxt": "^2.14.6"
+    "nuxt": "^2.14.6",
+    "vuelidate": "^0.7.6"
   },
   "devDependencies": {
     "@nuxt/types": "^2.14.6",
