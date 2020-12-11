@@ -1,6 +1,7 @@
-import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators'
+import { Module, VuexModule, Mutation, Action, config } from 'vuex-module-decorators'
 import { RemainderModel } from '@/models/Remainder'
 import { getAll, regist, update } from '@/services/RemainderService'
+config.rawError = true
 
 @Module({ name: 'remainder', namespaced: true, stateFactory: true })
 export default class RemainderModule extends VuexModule {
@@ -9,6 +10,7 @@ export default class RemainderModule extends VuexModule {
     // mutation
     @Mutation
     public setRemainders(renmainderList: Array<RemainderModel>) {
+        this.remainders = new Array<RemainderModel>()
         for (let i:number = 0; i < renmainderList.length; i++) {
             this.remainders.push(renmainderList[i])
         }

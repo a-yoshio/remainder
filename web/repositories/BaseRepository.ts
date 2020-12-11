@@ -5,7 +5,7 @@ export class BaseRepository {
     url: String;
 
     constructor(path: String) {
-        this.baseUrl = process.env.apiURL as String;
+        this.baseUrl = '/api';
         this.url = this.baseUrl + '' + path;
     }
 
