@@ -142,7 +142,7 @@
       <v-btn class="mr-4" @click="clear">
         clear
       </v-btn>
-      <v-btn @click="cancel">
+      <v-btn to="/remainder" nuxt>
         cancel
       </v-btn>
     </form>
@@ -251,15 +251,11 @@ import { RemainderForm } from "@/forms/Remainder"
       },
       clear () {
         this.$v.$reset()
-        this.name = ''
-        this.email = ''
-        this.select = null
-        this.checkbox = false
+        this.date = new Date().toISOString().substr(0, 10)
+        this.time = '12:00',
+        this.contents = ''
+        this.tag = {}
       },
-      cancel() {
-        console.log('call!')
-        this.clear()
-      }
     },
   }
 </script>
