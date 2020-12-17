@@ -1,12 +1,10 @@
 import axios, { AxiosPromise }  from 'axios';
 
 export class BaseRepository {
-    baseUrl: String;
     url: String;
 
     constructor(path: String) {
-        this.baseUrl = '/api';
-        this.url = this.baseUrl + '' + path;
+        this.url = process.env.apiURL + '' + path;
     }
 
     private createAccessUrl(path?: String): string {
@@ -14,10 +12,11 @@ export class BaseRepository {
         if (path != null) {
             accessUrl = accessUrl + '/' + path
         }
+        console.log('>>>>' + accessUrl)
         return accessUrl as string
     }
 
-    public async get(param?: Map<String, String>, path?: String): Promise<AxiosPromise<any>> {      
+    public async get(param?: Map<String, any>, path?: String): Promise<AxiosPromise<any>> {      
         try {
             const response = await axios.get(this.createAccessUrl(path), {
                 params: param
@@ -28,11 +27,9 @@ export class BaseRepository {
         }
     }
     
-    public async post(param?: Map<String, String>, path?: String): Promise<Boolean>{
+    public async post(param?: any, path?: String): Promise<Boolean>{
         try {
-            await axios.post(this.createAccessUrl(path), {
-                params: param
-            })
+            await axios.post(this.createAccessUrl(path), param)
             return true
         } catch(error) {
             throw new Error('[post]server access error: ' + error)

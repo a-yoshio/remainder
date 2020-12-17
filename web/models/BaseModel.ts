@@ -3,11 +3,10 @@ export class BaseModel {
         return JSON.stringify(this)
     }
 
-    public convertMap(): Map<String, String> {
-        let propertyMap = new Map<String, String>();
+    public convertMap(): Map<String, any> {
+        let propertyMap = new Map<String, any>();
         for (const propKey in this) {
-            console.log('>>> get Key: ' + propKey)
-            // propertyMap.set(propKey, this)
+            propertyMap.set(propKey, this[propKey])
         }
         return propertyMap
         

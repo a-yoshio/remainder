@@ -17,12 +17,13 @@ export class RemainderRepository extends BaseRepository{
     }
 
     async insert(remainder: RemainderModel): Promise<Boolean> {
-        let remaidner: Map<String, String> = remainder.convertMap()
-        return await super.post(remaidner, undefined)
+        const jsonData = remainder.createJsonParam()
+        console.log(jsonData)
+        return await super.post(jsonData, undefined)
     }
 
     async update(remainder: RemainderModel): Promise<Boolean> {
-        let remaidner: Map<String, String> = remainder.convertMap()
+        let remaidner: Map<String, any> = remainder.convertMap()
         if (!remainder.id) {
             throw Error('[update]Invalide remainder id')
         } else {

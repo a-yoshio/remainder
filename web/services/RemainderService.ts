@@ -1,5 +1,6 @@
 import { RemainderModel } from '~/models/Remainder';
 import { RemainderRepository } from '../repositories/RemainderRepository';
+import { RemainderForm } from '../forms/Remainder'
 
 const remainderRepository:RemainderRepository = new RemainderRepository()
 
@@ -7,8 +8,9 @@ export async function getAll(userId: number): Promise<Array<RemainderModel>>{
     return await remainderRepository.selectFromUserId(userId)
 }
 
-export async function regist(userId: number, contents: String, tagId: number, datetime: Date): Promise<Boolean> {
-    const newRemainder = new RemainderModel(contents, userId, tagId, datetime, false, undefined)
+export async function regist(remainder : RemainderForm): Promise<Boolean> {
+    const newRemainder = new RemainderModel(remainder.contents, remainder.userId, remainder.tagId, 
+        remainder.datetime, remainder.complete, remainder.id)
     const result = await remainderRepository.insert(newRemainder)
     return result
 }

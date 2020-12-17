@@ -1,4 +1,5 @@
-from app.api.api import db
+from app.api.api import (db)
+from app.form.remainder import (Remainder)
 
 class RemainderModel(db.Model):
     __tablename__ = 'remainder'
@@ -10,7 +11,6 @@ class RemainderModel(db.Model):
     datetime = db.Column(db.DateTime, null_able=False)
     complete = db.Column(db.Boolean, null_able=False)
 
-
     def to_dict(self):
         return {
             'id': self.id,
@@ -20,3 +20,12 @@ class RemainderModel(db.Model):
             'datetime': self.datetime,
             'complete': self.complete
         }
+
+    def set_param(self, remainder_form: Remainder):
+        self.user_id = remainder_form.user_id
+        self.contents = remainder_form.contents
+        self.tag_id = remainder_form.tag_id
+        self.datetime = remainder_form.parse_date_type()
+        self.complete = remainder_form.complete
+        if remainder_form.remainder_id != 0:
+            self.id = remainder_form.remainder_id

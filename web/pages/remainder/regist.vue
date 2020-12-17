@@ -1,6 +1,5 @@
 <template>
   <v-card
-    :loading="loading"
     class="mx-auto my-12"
     max-width="500"
   >
@@ -9,12 +8,12 @@
         cols="d-flex"
       >
         <v-alert
-          v-show="submitError"
+          v-show="showError"
           dense
           outlined
           type="error"
         >
-          date, time, contents are required. Please enter anything.
+          {{errorMessage}}
         </v-alert>
     </v-col>
     <form style="padding: 10px">
@@ -120,15 +119,19 @@
         hide-details="auto"
       ></v-text-field>
       </v-col>
-      <v-col
-        class="d-flex"
-      >
-      <v-select
-        v-model="tag"
-        :items="tags"
-        label="Tag"
-        dense
-      ></v-select>
+      <v-col class="d-flex"
+        cols="12"
+        sm="6">
+        <v-select
+          v-model="tag"
+          :items="tags"
+          item-text="title"
+          item-value="id"
+          label="Tags"
+          return-object
+          dense
+        >
+        </v-select>
       </v-col>
       <v-btn
         class="mr-4"
@@ -136,8 +139,11 @@
       >
         submit
       </v-btn>
-      <v-btn @click="clear">
+      <v-btn class="mr-4" @click="clear">
         clear
+      </v-btn>
+      <v-btn @click="cancel">
+        cancel
       </v-btn>
     </form>
   </v-card>
@@ -145,6 +151,9 @@
 <script>
 import { validateContents } from '@/utils/validation'
 import { required } from 'vuelidate/lib/validators'
+import { remainderModule } from "@/store"
+import { parse } from "date-fns"
+import { RemainderForm } from "@/forms/Remainder"
 
   export default {
     data () {
@@ -152,7 +161,6 @@ import { required } from 'vuelidate/lib/validators'
         date: new Date().toISOString().substr(0, 10),
         menu: false,
         time: '12:00',
-        // timeStep: '12:00',
         modal: false,
         modal2: false,
         contents: '',
@@ -160,13 +168,14 @@ import { required } from 'vuelidate/lib/validators'
           value => !!value || 'Required.',
           value => (value && value.length <= 30) || 'Max 30 characters',
         ],
-        tag: null,
+        tag: {},
         tags: [
-          'プライベート',
-          '会社',
-          '重要事項'
+          {id:1, title: '家'},
+          {id:2, title: '会社'},
+          {id:3, title: '遊び'}
         ],
-        submitError: false,
+        showError: false,
+        errorMessage: ''
       }
     },
     validations: {
@@ -215,19 +224,28 @@ import { required } from 'vuelidate/lib/validators'
       allowedHours: v => v % 2,
       allowedMinutes: v => v >= 5 && v <= 55,
       allowedStep: m => m % 5 === 0,
-      submit () {
+      async submit () {
         console.log('submit!')
-        this.submitError = false
+        this.showError = false
+        this.errorMessage = ''
+        // fire
         this.$v.$touch()
+        // check invalid
         if (this.$v.$invalid) {
           this.submitStatus = 'ERROR'
-          this.submitError = true
+          this.errorMessage = 'date, time, contents are required. Please enter anything.'
+          this.showError = true
         } else {
           // do your submit logic here
           this.submitStatus = 'PENDING'
-          setTimeout(() => {
-            this.submitStatus = 'OK'
-          }, 500)
+          const specifideDateTime = parse(this.date + this.time, 'yyyy-MM-ddhh:mm', new Date())
+          const newRemainder = new RemainderForm(this.contents, 1, this.tag.id, specifideDateTime, false)
+          const result = await remainderModule.regist(newRemainder)
+          if (!result) {
+            this.errorMessage = 'Server Error'
+            this.showError = true
+          }
+          this.$router.push('/remainder')
         }
         console.log(this.submitStatus)
       },
@@ -238,6 +256,10 @@ import { required } from 'vuelidate/lib/validators'
         this.select = null
         this.checkbox = false
       },
+      cancel() {
+        console.log('call!')
+        this.clear()
+      }
     },
   }
 </script>

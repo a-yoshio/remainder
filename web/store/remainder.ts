@@ -1,7 +1,7 @@
-import { Module, VuexModule, Mutation, Action, config } from 'vuex-module-decorators'
+import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators'
 import { RemainderModel } from '@/models/Remainder'
 import { getAll, regist, update } from '@/services/RemainderService'
-config.rawError = true
+import { RemainderForm } from '../forms/Remainder'
 
 @Module({ name: 'remainder', namespaced: true, stateFactory: true })
 export default class RemainderModule extends VuexModule {
@@ -16,15 +16,22 @@ export default class RemainderModule extends VuexModule {
         }
     }
     // action
-    @Action
+    @Action({rawError:true})
     public async getAll(userId: number) {
         const remainders = await getAll(userId)
         this.setRemainders(remainders)
     }
-    public async regist(user_id: number, contents: String, tag_id: number, datetime: Date): Promise<Boolean> {
-        return await regist(user_id, contents, tag_id, datetime)
+    @Action({rawError:true})
+    public async regist(remainder: RemainderForm): Promise<Boolean> {
+        console.log(remainder)
+        try {
+            return await regist(remainder)
+        } catch (e) {
+            console.error(e)
+            return false
+        } 
     }
-
+    @Action({rawError:true})
     public async update(userId: number, contents: String, tagId: number, datetime: Date, complete: boolean, remainderId: number) {
         return await update(userId, contents, tagId, datetime, complete, remainderId)
     }
