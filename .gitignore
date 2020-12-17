@@ -15,4 +15,7 @@ build/
 
 swagger/
 
+.idea/
 .idea
+
+PyCharm/
