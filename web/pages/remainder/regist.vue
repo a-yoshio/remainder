@@ -133,6 +133,11 @@
         >
         </v-select>
       </v-col>
+      <v-switch
+        v-model="complete"
+        inset
+        :label="`Complete : ${complete.toString()}`"
+      ></v-switch>
       <v-btn
         class="mr-4"
         @click="submit"
@@ -174,6 +179,7 @@ import { RemainderForm } from "@/forms/Remainder"
           {id:2, title: '会社'},
           {id:3, title: '遊び'}
         ],
+        complete: true,
         showError: false,
         errorMessage: ''
       }
@@ -239,7 +245,7 @@ import { RemainderForm } from "@/forms/Remainder"
           // do your submit logic here
           this.submitStatus = 'PENDING'
           const specifideDateTime = parse(this.date + this.time, 'yyyy-MM-ddhh:mm', new Date())
-          const newRemainder = new RemainderForm(this.contents, 1, this.tag.id, specifideDateTime, false)
+          const newRemainder = new RemainderForm(this.contents, 1, this.tag.id, specifideDateTime, this.complete)
           const result = await remainderModule.regist(newRemainder)
           if (!result) {
             this.errorMessage = 'Server Error'
