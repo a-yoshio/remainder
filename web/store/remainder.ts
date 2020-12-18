@@ -60,7 +60,6 @@ export default class RemainderModule extends VuexModule {
 
     @Action({rawError:true})
     public async regist(remainder: RemainderForm): Promise<Boolean> {
-        console.log(remainder)
         try {
             return await regist(remainder)
         } catch (e) {

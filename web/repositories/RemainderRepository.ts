@@ -25,7 +25,6 @@ export class RemainderRepository extends BaseRepository{
 
     async insert(remainder: RemainderModel): Promise<Boolean> {
         const jsonData = remainder.createJsonParam()
-        console.log(jsonData)
         return await super.post(jsonData, undefined)
     }
 

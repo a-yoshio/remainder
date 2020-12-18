@@ -17,7 +17,6 @@ export class RemainderModel extends BaseModel{
         if (typeof datetime == 'string') {
             datetime = new Date(datetime)
         }
-        console.log(typeof datetime)
         this.datetime = datetime as Date;
         this.complete = complete;
     }
