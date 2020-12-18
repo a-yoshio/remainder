@@ -13,7 +13,6 @@ export class RemainderRepository extends BaseRepository{
         const remainders: Array<RemainderModel> = []
         for(let i = 0; i < remainderData.length; i++) {
             const remainder= this.convertObject(remainderData[i])
-            console.log(remainder.datetime)
             remainders.push(remainder)
         }
         return remainders

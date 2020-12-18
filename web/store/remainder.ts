@@ -1,8 +1,7 @@
 import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators'
 import { RemainderModel } from '@/models/Remainder'
-import { regist, update, get } from '@/services/RemainderService'
+import { regist, update, get, deleteRemainder } from '@/services/RemainderService'
 import { RemainderForm } from '../forms/Remainder'
-import { parse } from 'date-fns'
 
 @Module({ name: 'remainder', namespaced: true, stateFactory: true })
 export default class RemainderModule extends VuexModule {
@@ -73,5 +72,9 @@ export default class RemainderModule extends VuexModule {
         const strNewDateTime:string = this.date + 'T' + this.time
         const newDateTime = new Date(strNewDateTime)
         return await update(this.user_id, this.contents, this.tag_id, newDateTime, this.complete, this.id as number)
+    }
+    @Action({rawError:true})
+    public async delete() {
+        return await deleteRemainder(this.id)
     }
 }

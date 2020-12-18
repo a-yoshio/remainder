@@ -8,8 +8,8 @@ export async function getAll(): Promise<Array<RemainderModel>>{
     return await remainderRepository.selectAll()
 }
 
-export async function get(remainder_id: number): Promise<RemainderModel>{
-    const data:RemainderModel = await remainderRepository.selectFromId(remainder_id)
+export async function get(remainderId: number): Promise<RemainderModel>{
+    const data:RemainderModel = await remainderRepository.selectFromId(remainderId)
     return data
 }
 
