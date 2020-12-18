@@ -128,13 +128,13 @@ export default {
     };
   },
   validations: {
-    date: {
+    mDate: {
       required,
     },
-    time: {
+    mTime: {
       required,
     },
-    contents: {
+    mContents: {
       required,
       minLength: 1,
       maxLength: 30,
@@ -146,7 +146,7 @@ export default {
   },
   computed: {
     contentsErrors() {
-      return validateContents(this.$v.contents);
+      return validateContents(this.$v.mContents);
     },
     mTime: {
       // getter 関数
@@ -171,7 +171,7 @@ export default {
         return remainderModule.contents
       },
       set: function (newValue) {
-        remainderModule.setDate(newValue)
+        remainderModule.setContents(newValue)
       },
     },
     mComplete: {
@@ -207,19 +207,7 @@ export default {
       } else {
         // do your submit logic here
         this.submitStatus = "PENDING";
-        const specifideDateTime = parse(
-          this.date + this.time,
-          "yyyy-MM-ddhh:mm",
-          new Date()
-        );
-        const newRemainder = new RemainderForm(
-          this.contents,
-          1,
-          this.tag.id,
-          specifideDateTime,
-          this.complete
-        );
-        const result = await remainderModule.update(newRemainder);
+        const result = await remainderModule.update();
         if (!result) {
           this.errorMessage = "Server Error";
           this.showError = true;

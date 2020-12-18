@@ -29,11 +29,11 @@ export class RemainderRepository extends BaseRepository{
     }
 
     async update(remainder: RemainderModel): Promise<Boolean> {
-        let remaidner: Map<string, any> = remainder.convertMap()
+        let remainderMap = remainder.createJsonParam()
         if (!remainder.id) {
             throw Error('[update]Invalide remainder id')
         } else {
-            return await super.post(remaidner, remainder.id.toString())
+            return await super.post(remainderMap, remainder.id.toString())
         }
     }
 

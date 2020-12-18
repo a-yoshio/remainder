@@ -1,7 +1,6 @@
 import { RemainderModel } from '~/models/Remainder';
 import { RemainderRepository } from '../repositories/RemainderRepository';
 import { RemainderForm } from '../forms/Remainder'
-import { format } from 'date-fns'
 
 const remainderRepository:RemainderRepository = new RemainderRepository()
 

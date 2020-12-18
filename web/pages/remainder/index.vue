@@ -72,7 +72,7 @@ export default {
   },
   async asyncData() {
     // このページにアクセスが来たときに、実行される。
-    return await remaindersModule.getAll(1); // storeモジュールのmutation関数を実行
+    return await remaindersModule.getAll() // storeモジュールのmutation関数を実行
   },
   computed: {
     remainders() {

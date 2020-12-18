@@ -2,11 +2,12 @@ import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators'
 import { RemainderModel } from '@/models/Remainder'
 import { regist, update, get } from '@/services/RemainderService'
 import { RemainderForm } from '../forms/Remainder'
+import { parse } from 'date-fns'
 
 @Module({ name: 'remainder', namespaced: true, stateFactory: true })
 export default class RemainderModule extends VuexModule {
     // state
-    id: number|undefined = undefined
+    id: number = 0
     contents: string = ''
     user_id: number = 0
     tag_id: number = 0
@@ -17,7 +18,7 @@ export default class RemainderModule extends VuexModule {
     // mutation
     @Mutation
     public setRemainder(remainder: RemainderModel) {
-        this.id = remainder.id
+        this.id = remainder.id as number
         this.contents = remainder.contents
         this.user_id = remainder.user_id
         this.tag_id = remainder.tag_id
@@ -68,13 +69,9 @@ export default class RemainderModule extends VuexModule {
         } 
     }
     @Action({rawError:true})
-    public async update(userId: number, contents: string, tagId: number, datetime: Date, complete: boolean, remainderId: number) {
-        return await update(userId, contents, tagId, datetime, complete, remainderId)
+    public async update() {
+        const strNewDateTime:string = this.date + 'T' + this.time
+        const newDateTime = new Date(strNewDateTime)
+        return await update(this.user_id, this.contents, this.tag_id, newDateTime, this.complete, this.id as number)
     }
-
-    // public async delete(remainderId: number) {
-    //     return await deleteRemainder(remainderId)
-    // }
-    // getter
-    // get name() {}
 }
