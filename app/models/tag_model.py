@@ -1,4 +1,4 @@
-from app.api.api import db
+from app.api.api import (db)
 
 class TagModel(db.Model):
     __tablename__ = 'tag'

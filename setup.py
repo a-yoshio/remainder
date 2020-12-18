@@ -7,6 +7,6 @@ setup(
     install_requires=[
         'flask',
         'Flask-SQLAlchemy',
-        'psycopg2'
+        'flask-cors'
     ]
 )

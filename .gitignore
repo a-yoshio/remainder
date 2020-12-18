@@ -14,3 +14,8 @@ build/
 *.egg-info/
 
 swagger/
+
+.idea/
+.idea
+
+PyCharm/
