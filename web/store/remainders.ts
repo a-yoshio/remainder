@@ -1,7 +1,6 @@
 import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators'
 import { RemainderModel } from '@/models/Remainder'
-import { getAll, regist, update, get } from '@/services/RemainderService'
-import { RemainderForm } from '../forms/Remainder'
+import { getAll } from '@/services/RemainderService'
 
 @Module({ name: 'remainders', namespaced: true, stateFactory: true })
 export default class RemaindersModule extends VuexModule {

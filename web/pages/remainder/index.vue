@@ -19,7 +19,7 @@
             <v-list-item three-line>
               <v-list-item-content>
                 <v-list-item-subtitle class="overline mb-4">
-                  {{ remainder.datetime }}
+                  {{ remainder.disp_datetime }}
                 </v-list-item-subtitle>
                 <v-list-item-subtitle class="headline mb-1">
                   {{ remainder.contents }}
@@ -77,7 +77,7 @@ export default {
   computed: {
     remainders() {
       return remaindersModule.remainders
-    }
+    },
   },
   methods: {
     next(path: string, remainderId: number) {

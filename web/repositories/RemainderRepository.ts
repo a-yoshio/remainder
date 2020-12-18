@@ -1,3 +1,4 @@
+import { remaindersModule } from '~/store';
 import { RemainderModel } from '../models/Remainder';
 import { BaseRepository } from './BaseRepository';
 
@@ -9,11 +10,13 @@ export class RemainderRepository extends BaseRepository{
     async selectAll(): Promise<Array<RemainderModel>> {
         const response = await super.get()
         const remainderData = response.data.remainder_list
-        const remaiders: Array<RemainderModel> = []
+        const remainders: Array<RemainderModel> = []
         for(let i = 0; i < remainderData.length; i++) {
-            remaiders.push(this.convertObject(remainderData[i]))
+            const remainder= this.convertObject(remainderData[i])
+            console.log(remainder.datetime)
+            remainders.push(remainder)
         }
-        return remaiders
+        return remainders
     }
 
     async selectFromId(remainderId: number): Promise<RemainderModel> {

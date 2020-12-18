@@ -8,6 +8,7 @@ export class RemainderModel extends BaseModel{
     tag_id: number;
     datetime: Date;
     complete: boolean;
+    disp_datetime: string;
     constructor(contents: string, userId: number, tagId: number, datetime: string|Date, complete: boolean, id?: number) {
         super()
         this.id = id;
@@ -15,14 +16,20 @@ export class RemainderModel extends BaseModel{
         this.user_id = userId
         this.tag_id = tagId;
         if (typeof datetime == 'string') {
+            datetime = datetime + ' +0900'
             datetime = new Date(datetime)
         }
         this.datetime = datetime as Date;
         this.complete = complete;
+        this.disp_datetime = this.formatDateTimeForDisplay()
     }
 
     public formatDateTimeForRequest(): string {
         return format(this.datetime, "yyyyMMddHHmm")
+    }
+
+    public formatDateTimeForDisplay(): string {
+        return format(this.datetime, "yyyy年MM月dd日 HH:mm")
     }
     
     public createJsonParam() {
