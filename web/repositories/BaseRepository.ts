@@ -1,33 +1,38 @@
 import axios, { AxiosPromise }  from 'axios';
 
 export class BaseRepository {
-    url: String;
+    url: string;
 
-    constructor(path: String) {
+    constructor(path: string) {
         this.url = process.env.apiURL + '' + path;
     }
 
-    private createAccessUrl(path?: String): string {
+    private createAccessUrl(path?: string): string {
         let accessUrl = this.url
         if (path != null) {
             accessUrl = accessUrl + '/' + path
         }
-        console.log('>>>>' + accessUrl)
         return accessUrl as string
     }
 
-    public async get(param?: Map<String, any>, path?: String): Promise<AxiosPromise<any>> {      
+    public async get(param?: Map<string, string>, path?: string): Promise<AxiosPromise<any>> {      
         try {
-            const response = await axios.get(this.createAccessUrl(path), {
-                params: param
-            })
+            let paramStr = ''
+            if (param) {
+                paramStr = '?'
+                param.forEach((value, key) => {
+                    paramStr = paramStr + key + '=' + value + '&'
+                })
+                paramStr = paramStr.slice(0, -1)
+            } 
+            const response = await axios.get(this.createAccessUrl(path) + paramStr)
             return response
         } catch(error) {
             throw new Error('[get]server access error: ' + error)
         }
     }
     
-    public async post(param?: any, path?: String): Promise<Boolean>{
+    public async post(param?: any, path?: string): Promise<Boolean>{
         try {
             await axios.post(this.createAccessUrl(path), param)
             return true
