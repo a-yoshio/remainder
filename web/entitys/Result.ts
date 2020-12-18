@@ -1,7 +1,7 @@
-export class Result { //読み込めないけん！
+export class Result {
     'status': boolean
-    'cause': String
-    constructor(status: boolean, cause: String) {
+    'cause': string
+    constructor(status: boolean, cause: string) {
         this.status = status
         this.cause = cause
     }

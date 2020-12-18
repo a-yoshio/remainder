@@ -12,14 +12,14 @@
           ref="menu"
           v-model="menu"
           :close-on-content-click="false"
-          :return-value.sync="date"
+          :return-value.sync="mDate"
           transition="scale-transition"
           offset-y
           min-width="290px"
         >
-          <template v-slot:activator="{ on, attrs }">
+          <template v-slot:activator="{ on, attrs }" @click="date = mDate">
             <v-text-field
-              v-model="date"
+              v-model="mDate"
               label="Picker in menu"
               prepend-icon="mdi-calendar"
               readonly
@@ -40,13 +40,13 @@
         <v-dialog
           ref="dialog"
           v-model="modal2"
-          :return-value.sync="time"
+          :return-value.sync="mTime"
           persistent
           width="290px"
         >
           <template v-slot:activator="{ on, attrs }">
             <v-text-field
-              v-model="time"
+              v-model="mTime"
               label="time"
               prepend-icon="mdi-clock-time-four-outline"
               readonly
@@ -55,14 +55,14 @@
             ></v-text-field>
           </template>
           <v-time-picker
-            v-model="time"
+            v-model="mTime"
             :allowed-minutes="allowedStep"
             class="mt-4"
             format="24hr"
           >
             <v-spacer></v-spacer>
             <v-btn text color="primary" @click="modal2 = false"> Cancel </v-btn>
-            <v-btn text color="primary" @click="$refs.dialog.save(time)">
+            <v-btn text color="primary" @click="$refs.dialog.save(mTime)">
               OK
             </v-btn>
           </v-time-picker>
@@ -70,7 +70,7 @@
       </v-col>
       <v-col class="d-flex">
         <v-text-field
-          v-model="contents"
+          v-model="mContents"
           label="Contents"
           :rules="rules"
           hide-details="auto"
@@ -89,9 +89,9 @@
         </v-select>
       </v-col>
       <v-switch
-        v-model="complete"
+        v-model="mComplete"
         inset
-        :label="`Complete : ${complete.toString()}`"
+        :label="`Complete : ${mComplete}`"
       ></v-switch>
       <v-btn class="mr-4" @click="submit"> submit </v-btn>
       <v-btn class="mr-4" @click="clear"> clear </v-btn>
@@ -109,23 +109,20 @@ import { RemainderForm } from "@/forms/Remainder";
 export default {
   data() {
     return {
-      date: new Date().toISOString().substr(0, 10),
+      date: '',
       menu: false,
-      time: "12:00",
       modal: false,
       modal2: false,
-      contents: "",
       rules: [
         (value) => !!value || "Required.",
         (value) => (value && value.length <= 30) || "Max 30 characters",
       ],
-      tag: {},
+      tag: {id: 1, title: "家"},
       tags: [
         { id: 1, title: "家" },
         { id: 2, title: "会社" },
         { id: 3, title: "遊び" },
       ],
-      complete: true,
       showError: false,
       errorMessage: "",
     };
@@ -144,26 +141,54 @@ export default {
     },
     tag: {},
   },
-  watch: {
-    date(val) {
-      this.dateFormatted = this.formatDate(this.date);
-    },
+  async asyncData({params}) {
+    await remainderModule.get(params.id)
   },
   computed: {
-    computedDateFormatted() {
-      return this.formatDate(this.date);
-    },
     contentsErrors() {
       return validateContents(this.$v.contents);
     },
+    mTime: {
+      // getter 関数
+      get: function () {
+        return remainderModule.time
+      },
+      // setter 関数
+      set: function (newValue) {
+        remainderModule.setTime(newValue)
+      }
+    },
+    mDate: {
+      get: function () {
+        return remainderModule.date
+      },
+      set: function (newValue) {
+        remainderModule.setDate(newValue)
+      },
+    }, 
+    mContents: {
+      get: function () {
+        return remainderModule.contents
+      },
+      set: function (newValue) {
+        remainderModule.setDate(newValue)
+      },
+    },
+    mComplete: {
+      get: function () {
+        return remainderModule.complete
+      },
+      set: function (newValue) {
+        remainderModule.setComplete(newValue)
+      },
+    },
+  },
+  watch: {
+    date(val) {
+      remainderModule.setDate(this.date)
+    }
   },
   methods: {
-    formatDate(date) {
-      if (!date) return null;
-
-      const [year, month, day] = date.split("-");
-      return `${month}/${day}/${year}`;
-    },
     allowedHours: (v) => v % 2,
     allowedMinutes: (v) => v >= 5 && v <= 55,
     allowedStep: (m) => m % 5 === 0,
@@ -194,7 +219,7 @@ export default {
           specifideDateTime,
           this.complete
         );
-        const result = await remainderModule.regist(newRemainder);
+        const result = await remainderModule.update(newRemainder);
         if (!result) {
           this.errorMessage = "Server Error";
           this.showError = true;

@@ -36,7 +36,7 @@ export class BaseRepository {
         }
     }
 
-    public async delete(path: String): Promise<Boolean>{
+    public async delete(path: string): Promise<Boolean>{
         try {
             await axios.delete(this.createAccessUrl(path))
             return true

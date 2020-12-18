@@ -1,11 +1,17 @@
 import { RemainderModel } from '~/models/Remainder';
 import { RemainderRepository } from '../repositories/RemainderRepository';
 import { RemainderForm } from '../forms/Remainder'
+import { format } from 'date-fns'
 
 const remainderRepository:RemainderRepository = new RemainderRepository()
 
-export async function getAll(userId: number): Promise<Array<RemainderModel>>{
-    return await remainderRepository.selectFromUserId(userId)
+export async function getAll(): Promise<Array<RemainderModel>>{
+    return await remainderRepository.selectAll()
+}
+
+export async function get(remainder_id: number): Promise<RemainderModel>{
+    const data:RemainderModel = await remainderRepository.selectFromId(remainder_id)
+    return data
 }
 
 export async function regist(remainder : RemainderForm): Promise<Boolean> {
@@ -15,7 +21,7 @@ export async function regist(remainder : RemainderForm): Promise<Boolean> {
     return result
 }
 
-export async function update(userId: number, contents: String, tagId: number, datetime: Date, complete: boolean, remianderId: number): Promise<Boolean> {
+export async function update(userId: number, contents: string, tagId: number, datetime: Date, complete: boolean, remianderId: number): Promise<Boolean> {
     const targetRemainder = new RemainderModel(contents, userId, tagId, datetime, complete, remianderId)
     const result = await remainderRepository.update(targetRemainder)
     return result

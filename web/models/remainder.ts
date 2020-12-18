@@ -1,35 +1,47 @@
 import { BaseModel } from "./BaseModel";
-import { format } from "date-fns";
+import { format, parse } from "date-fns";
 
 export class RemainderModel extends BaseModel{
     id?: number;
-    contents: String;
+    contents: string;
     user_id: number;
     tag_id: number;
     datetime: Date;
     complete: boolean;
-    constructor(contents: String, userId: number, tagId: number, datetime: Date, complete: boolean, id?: number) {
+    constructor(contents: string, userId: number, tagId: number, datetime: string|Date, complete: boolean, id?: number) {
         super()
         this.id = id;
         this.contents = contents;
         this.user_id = userId
         this.tag_id = tagId;
-        this.datetime = datetime;
+        if (typeof datetime == 'string') {
+            datetime = new Date(datetime)
+        }
+        console.log(typeof datetime)
+        this.datetime = datetime as Date;
         this.complete = complete;
     }
 
-    parseDatetimeForRequest() {
+    public formatDateTimeForRequest(): string {
         return format(this.datetime, "yyyyMMddHHmm")
     }
-
-    createJsonParam() {
+    
+    public createJsonParam() {
         return {
             id: this.id,
             contents: this.contents,
             user_id: this.user_id,
             tag_id: this.tag_id,
-            datetime: this.parseDatetimeForRequest(),
+            datetime: this.formatDateTimeForRequest(),
             complete: this.complete
         }
+    }
+
+    public getDate(): string {
+        return this.datetime.toISOString().substr(0, 10)
+    }
+
+    public getTime(): string {
+        return format(this.datetime, 'HH:mm')
     }
 }

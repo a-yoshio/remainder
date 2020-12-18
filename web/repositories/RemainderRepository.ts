@@ -6,14 +6,21 @@ export class RemainderRepository extends BaseRepository{
         super('/remainder')
     }
 
-    async selectFromUserId(userId: number): Promise<Array<RemainderModel>> {
-        const response = await super.get(undefined, userId.toString())
+    async selectAll(): Promise<Array<RemainderModel>> {
+        const response = await super.get()
         const remainderData = response.data.remainder_list
         const remaiders: Array<RemainderModel> = []
         for(let i = 0; i < remainderData.length; i++) {
             remaiders.push(this.convertObject(remainderData[i]))
         }
         return remaiders
+    }
+
+    async selectFromId(remainderId: number): Promise<RemainderModel> {
+        const response = await super.get(undefined, remainderId.toString())
+        const objRemainder = response.data.remainder[0]
+        const remainder = this.convertObject(objRemainder)
+        return remainder
     }
 
     async insert(remainder: RemainderModel): Promise<Boolean> {
@@ -23,7 +30,7 @@ export class RemainderRepository extends BaseRepository{
     }
 
     async update(remainder: RemainderModel): Promise<Boolean> {
-        let remaidner: Map<String, any> = remainder.convertMap()
+        let remaidner: Map<string, any> = remainder.convertMap()
         if (!remainder.id) {
             throw Error('[update]Invalide remainder id')
         } else {

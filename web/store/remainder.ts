@@ -1,26 +1,63 @@
 import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators'
 import { RemainderModel } from '@/models/Remainder'
-import { getAll, regist, update } from '@/services/RemainderService'
+import { regist, update, get } from '@/services/RemainderService'
 import { RemainderForm } from '../forms/Remainder'
 
 @Module({ name: 'remainder', namespaced: true, stateFactory: true })
 export default class RemainderModule extends VuexModule {
     // state
-    remainders: Array<RemainderModel> = []
+    id: number|undefined = undefined
+    contents: string = ''
+    user_id: number = 0
+    tag_id: number = 0
+    datetime: Date|null = null
+    date: string = ''
+    time: string = ''
+    complete: boolean = false
     // mutation
     @Mutation
-    public setRemainders(renmainderList: Array<RemainderModel>) {
-        this.remainders = new Array<RemainderModel>()
-        for (let i:number = 0; i < renmainderList.length; i++) {
-            this.remainders.push(renmainderList[i])
-        }
+    public setRemainder(remainder: RemainderModel) {
+        this.id = remainder.id
+        this.contents = remainder.contents
+        this.user_id = remainder.user_id
+        this.tag_id = remainder.tag_id
+        this.datetime = remainder.datetime
+        this.complete = remainder.complete
+        this.date = remainder.getDate()
+        this.time = remainder.getTime()
     }
+
+    @Mutation
+    public setTime(time: string) {
+        this.time = time
+    } 
+
+    @Mutation
+    public setDate(date: string) {
+        if (!date) return null
+
+        const [year, month, day] = date.split("-")
+        this.date = `${year}-${month}-${day}`
+    }
+
+    @Mutation
+    public setContents(contents: string) {
+        this.contents = contents
+    }
+
+    @Mutation
+    public setComplete(complete: boolean) {
+        this.complete = complete
+    }    
+
     // action
     @Action({rawError:true})
-    public async getAll(userId: number) {
-        const remainders = await getAll(userId)
-        this.setRemainders(remainders)
+    public async get(remainderId: number): Promise<void> {
+        const remainder:RemainderModel = await get(remainderId)
+        this.setRemainder(remainder)
+        return
     }
+
     @Action({rawError:true})
     public async regist(remainder: RemainderForm): Promise<Boolean> {
         console.log(remainder)
@@ -32,7 +69,7 @@ export default class RemainderModule extends VuexModule {
         } 
     }
     @Action({rawError:true})
-    public async update(userId: number, contents: String, tagId: number, datetime: Date, complete: boolean, remainderId: number) {
+    public async update(userId: number, contents: string, tagId: number, datetime: Date, complete: boolean, remainderId: number) {
         return await update(userId, contents, tagId, datetime, complete, remainderId)
     }
 
