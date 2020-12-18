@@ -5,7 +5,6 @@ from flask_cors import CORS
 import app.service.remainder_service as remainder_service
 from app.config.application_config import configure_app
 from app.form.remainder import (Remainder)
-from app.form import (int_check)
 
 app = Flask(__name__, instance_relative_config='')
 configure_app(app)
@@ -16,11 +15,14 @@ db = SQLAlchemy()
 def hello():
     return 'Hello takoyaki'
 
-@app.route('/remainder/<user_id>', methods=['GET'])
-def get_remainder_list(user_id: str):
+@app.route('/remainder', methods=['GET'])
+def get_remainder_list():
     try:
+        # TODO: use applied userId
+        user_id = '1'
         if user_id.isdigit():
-            remainder_list = remainder_service.get_list_with_user_id(user_id)
+            intId = int(user_id)
+            remainder_list = remainder_service.get_with_user_id(intId)
             respose_message = jsonify({
                 'status': 'OK',
                 'remainder_list': remainder_list
@@ -31,6 +33,24 @@ def get_remainder_list(user_id: str):
     except BaseException as e:
         print(e)
         return str(e), 400
+
+@app.route('/remainder/<remainder_id>', methods=['GET'])
+def get_remainder(remainder_id: str):
+    try:
+        if remainder_id.isdigit():
+            intId = int(remainder_id)
+            remainder = remainder_service.get(intId)
+            respose_message = jsonify({
+                'status': 'OK',
+                'remainder': remainder
+            })
+            return respose_message, 200
+        else:
+            raise TypeError(f'user_id must be int type')
+    except BaseException as e:
+        print(e)
+        return str(e), 400
+
 
 @app.route('/remainder', methods=['POST'])
 def add_remainder():
@@ -79,7 +99,6 @@ def delete(remainder_id: str):
         print('faild remainder delete')
         print(e)
         return str(e), 500
-
 
 if __name__ == '__main__':
     db.init_app(app)

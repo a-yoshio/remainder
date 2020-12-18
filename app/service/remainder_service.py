@@ -4,7 +4,10 @@ from app.form.remainder import (Remainder)
 
 repository = RemainderRepository()
 
-def get_list_with_user_id(user_id: str):
+def get(id: int):
+    return repository.get_with_remainder_id(id)
+
+def get_with_user_id(user_id: int):
     return repository.get_with_user_id(user_id)
 
 

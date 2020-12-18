@@ -13,8 +13,8 @@ class RemainderRepository:
         return convert_qury_data_to_list(remainder_list)
 
     def get_with_remainder_id(self, remainder_id: int):
-        remainder_list = RemainderModel.query.filter_by(id=remainder_id).all()
-        return convert_qury_data_to_list(remainder_list)
+        remainder = RemainderModel.query.filter_by(id=remainder_id).first()
+        return remainder
 
     def get_with_user_id(self, user_id: int):
         remainder_list = RemainderModel.query.filter_by(user_id=user_id).all()
