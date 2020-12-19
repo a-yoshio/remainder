@@ -9,3 +9,5 @@ python -m venv .venv
 source .venv/bin/activate
 
 source .flaskenv
+
+pip install --upgrade pip

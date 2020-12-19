@@ -1,4 +1,5 @@
 from app.api.api import (db)
+from app.form.tag import Tag
 
 class TagModel(db.Model):
     __tablename__ = 'tag'
@@ -16,3 +17,9 @@ class TagModel(db.Model):
             'color': self.color,
             'user_id': self.user_id
         }
+    def set_param(self, tag_form: Tag):
+        self.title = tag_form.title
+        self.color = tag_form.colors
+        self.user_id = tag_form.user_id
+        if tag_form.id != 0:
+            self.id = tag_form.id
