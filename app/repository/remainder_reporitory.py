@@ -1,15 +1,16 @@
-from app.api.api import (db)
+from flask_sqlalchemy import SQLAlchemy
 from app.models.remainder_model import RemainderModel
-from app.repository import (convert_qury_data_to_list,add_commit)
+from app.repository.base_repository import (BaseRepository)
 from app.form.remainder import Remainder as RemainderForm
 from app.repository.tag_repository import TagRepository
 
+db = SQLAlchemy()
 
-class RemainderRepository:
+class RemainderRepository(BaseRepository):
 
     def get_all(self):
         remainder_list = RemainderModel.all()
-        return convert_qury_data_to_list(remainder_list)
+        return super().convert_query_data_to_list(remainder_list)
 
     def get_with_remainder_id(self, remainder_id: int):
         remainder = RemainderModel.query.filter_by(id=remainder_id).first()
@@ -17,7 +18,7 @@ class RemainderRepository:
 
     def get_with_user_id(self, user_id: int):
         remainder_list = RemainderModel.query.filter_by(user_id=user_id).all()
-        return convert_qury_data_to_list(remainder_list)
+        return super().convert_query_data_to_list(remainder_list)
 
     def insert(self, remainder: RemainderForm, tag_repository: TagRepository):
         try:
@@ -25,7 +26,7 @@ class RemainderRepository:
             print('start remainder insert')
             remainder_model = RemainderModel()
             remainder_model.set_param(remainder)
-            add_commit(remainder_model)
+            super().add_commit(remainder_model)
 
             return True, 'insert success'
         except BaseException as e:
@@ -45,7 +46,7 @@ class RemainderRepository:
         print('start remainder update')
         remainder_model = db.session.query(RemainderModel).filter_by(id=remainder.remainder_id).first()
         remainder_model.set_param(remainder)
-        add_commit(remainder_model)
+        super().add_commit(remainder_model)
 
         return True, 'update success'
 

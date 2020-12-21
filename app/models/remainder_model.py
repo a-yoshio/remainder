@@ -1,5 +1,6 @@
-from app.api.api import (db)
-from app.form.remainder import (Remainder)
+from flask_sqlalchemy import SQLAlchemy
+from app.form.remainder import Remainder
+db = SQLAlchemy()
 
 class RemainderModel(db.Model):
     __tablename__ = 'remainder'

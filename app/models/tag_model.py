@@ -1,5 +1,7 @@
-from app.api.api import (db)
+from flask_sqlalchemy import SQLAlchemy
 from app.form.tag import Tag
+
+db = SQLAlchemy()
 
 class TagModel(db.Model):
     __tablename__ = 'tag'
