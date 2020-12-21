@@ -48,7 +48,7 @@ def get_remainder(remainder_id: str):
             })
             return respose_message, 200
         else:
-            raise TypeError(f'user_id must be int type')
+            raise TypeError(f'remainder_id must be int type')
     except BaseException as e:
         print(e)
         return str(e), 400
@@ -131,11 +131,11 @@ def get_tag(tag_id: str):
             remainder = tag_service.get(intId)
             respose_message = jsonify({
                 'status': 'OK',
-                'remainder': remainder
+                'tag': remainder
             })
             return respose_message, 200
         else:
-            raise TypeError(f'user_id must be int type')
+            raise TypeError(f'tag_id must be int type')
     except BaseException as e:
         print(e)
         return str(e), 400
@@ -154,7 +154,35 @@ def add_tag():
         else:
             return msg, 500
     except BaseException as e:
-        print('faild remainder insert')
+        print('faild tag insert')
+        print(e)
+        return str(e), 500
+
+@app.route('/remainder/tag/<tag_id>', methods=['POST'])
+def update_tag(tag_id:str):
+    try:
+        json_data = request.json
+        tag_form: Tag = Tag(json_data['title'], json_data['colors'], json_data['user_id'],json_data['id'])
+        tag_form.validateForUpdate()
+        tag_id = int(tag_id)
+        if tag_id != tag_form.id:
+            raise Exception('request param is wrong')
+        else:
+            result_flg, msg = tag_service.update_tag(tag_form)
+            return msg, 200
+    except BaseException as e:
+        print('faild tag update')
+        print(e)
+        return str(e), 500
+
+@app.route('/remainder/tag/<tag_id>', methods=['DELETE'])
+def delete_tag(tag_id: str):
+    try:
+        tag_id = int(tag_id)
+        result_flg, msg = tag_service.delete(tag_id)
+        return msg, 200
+    except BaseException as e:
+        print('faild tag delete')
         print(e)
         return str(e), 500
 

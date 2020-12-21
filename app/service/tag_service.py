@@ -13,7 +13,7 @@ def get_with_user_id(user_id: int):
 def add_tag(tag: Tag):
     return repository.insert(tag)
 
-def update_remainder(tag: Tag):
+def update_tag(tag: Tag):
     return repository.update(tag)
 
 def delete(tag_id: int):

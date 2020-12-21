@@ -19,3 +19,10 @@ class BaseRepository:
             db.session.rollback()
             raise
 
+    def delete(self, model):
+        try:
+            db.session.delete(model)
+            db.session.commit()
+        except:
+            db.session.rollback()
+            raise
