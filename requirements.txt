@@ -1,3 +1,5 @@
-flask == 1.1.2
-Flask-SQLAlchemy == 2.4.4
+flask==1.1.2
+Flask-SQLAlchemy==2.4.4
 flask-cors
+flask-bcrypt==0.7.1
+Flask-JWT==0.3.2
