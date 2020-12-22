@@ -58,7 +58,7 @@
 
 <script lang="ts">
 import { remaindersModule } from "@/store";
-import MovePage from "@/middleware/MovePage"
+import movepage from "@/middleware/movepage"
 
 export default {
   components: {},
@@ -82,7 +82,7 @@ export default {
   methods: {
     next(path: string, remainderId: number) {
       const url = location.origin + path + '/' + remainderId
-      MovePage(url)
+      movepage(url)
     }
   }
 };

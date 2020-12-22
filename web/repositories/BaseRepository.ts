@@ -25,6 +25,7 @@ export class BaseRepository {
                 })
                 paramStr = paramStr.slice(0, -1)
             } 
+            console.log('>>>>url: ' + this.createAccessUrl(path) + paramStr)
             const response = await axios.get(this.createAccessUrl(path) + paramStr)
             return response
         } catch(error) {

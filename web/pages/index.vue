@@ -6,5 +6,8 @@
     </nuxt-link>
   </v-row>
 </template>
-<script lang="ts">
+<script>
+export default {
+  middleware: 'authenticated'
+}
 </script>
