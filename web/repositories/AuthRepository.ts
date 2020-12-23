@@ -6,13 +6,9 @@ export class AuthRepository extends BaseRepository{
         super('/auth')
     }
 
-    async auth(authModel: AuthModel): Promise<Boolean> {
-        const param = new Map<string, any> ([
-            ['mas', authModel.mail_address],
-            ['pwd', authModel.password],
-        ])
-        const response = await super.get(param)
-        console.log('>>>>>resonse: ' + response)
-        return response.data.result
+    async auth(authModel: AuthModel): Promise<any> {
+        const param = authModel.createJsonParam()
+        const response = await super.post(param, undefined)
+        return response
     }
 }

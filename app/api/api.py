@@ -1,15 +1,16 @@
-from flask import (Flask, jsonify, request)
+from flask import (Flask, request, jsonify)
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from flask_bcrypt import Bcrypt
+from flask_jwt_extended import (JWTManager)
 
 import app.service.remainder_service as remainder_service
 import app.service.tag_service as tag_service
 import app.service.auth_service as auth_service
+import app.service.user_service as user_service
 from app.config.application_config import configure_app
 from app.form.remainder import Remainder
 from app.form.tag import Tag
-from app.form.auth import Auth
 
 app = Flask(__name__, instance_relative_config='')
 configure_app(app)
@@ -18,20 +19,15 @@ cors = CORS(app)
 db = SQLAlchemy()
 bcrypt = Bcrypt(app)
 
-@app.route('/hello')
-def hello():
-    return 'Hello takoyaki'
+jwt = JWTManager(app)
 
-@app.route('/auth')
+
+@app.route('/auth', methods=['POST'])
 def auth():
     try:
-        auth_form = Auth(request.args.get('mas'), request.args.get('pwd'))
-        auth_form.validation()
-        auth_service.auth(auth_form)
-        respose_message = jsonify({
-            'status': 'OK',
-        })
-        return respose_message, 200
+        data = request.json
+        print(data)
+        return auth_service.auth(data['mail_address'], data['password'])
     except BaseException as e:
         print(e)
         return str(e), 400
