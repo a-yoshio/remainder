@@ -102,7 +102,7 @@
 <script>
 import { validateContents } from "@/utils/validation";
 import { required } from "vuelidate/lib/validators";
-import { remaindersModule } from "@/store";
+import { remainderModule } from "@/store";
 import { parse } from "date-fns";
 import { RemainderForm } from "@/forms/Remainder";
 
@@ -194,7 +194,7 @@ export default {
           specifideDateTime,
           this.complete
         );
-        const result = await remaindersModule.regist(newRemainder);
+        const result = await remainderModule.regist(newRemainder);
         if (!result) {
           this.errorMessage = "Server Error";
           this.showError = true;

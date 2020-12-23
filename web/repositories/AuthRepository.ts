@@ -9,6 +9,6 @@ export class AuthRepository extends BaseRepository{
     async auth(authModel: AuthModel): Promise<any> {
         const param = authModel.createJsonParam()
         const response = await super.post(param, undefined)
-        return response
+        return response.data
     }
 }

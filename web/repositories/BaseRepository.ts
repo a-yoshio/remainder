@@ -33,10 +33,9 @@ export class BaseRepository {
         }
     }
     
-    public async post(param?: any, path?: string): Promise<Boolean>{
+    public async post(param?: any, path?: string): Promise<any>{
         try {
-            await axios.post(this.createAccessUrl(path), param)
-            return true
+            return await axios.post(this.createAccessUrl(path), param)
         } catch(error) {
             throw new Error('[post]server access error: ' + error)
         }

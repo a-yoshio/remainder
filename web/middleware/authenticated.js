@@ -1,4 +1,3 @@
-
-export default function ({ store, redirect }) {
-    return redirect('/login')
+export default function ({ store, redirect,route }) {
+    return redirect('/login?pageName=' + route.name)
 }

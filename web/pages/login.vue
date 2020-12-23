@@ -65,9 +65,15 @@ export default {
         },
     },
     methods: {
-      submit () {
+      async submit () {
         this.$v.$touch()
-        authModule.auth({mailAddress: this.mail_address, password: this.password})
+        await authModule.auth({mailAddress: this.mail_address, password: this.password})
+        if (!this.$route.query.pageName || this.$route.query.pageName == 'index') {
+            this.$router.push('/remainder')
+        } else {
+            this.$router.push(this.$router.query.pageNames)
+        }
+        
       },
       clear () {
         this.$v.$reset()
