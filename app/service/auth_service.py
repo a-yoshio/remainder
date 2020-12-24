@@ -25,7 +25,7 @@ def identity(payload):
     return userRepository.get(user_id)
 
 def refresh(id: int):
-    user_model = userRepository.get_with_mail(id)
+    user_model = userRepository.get(id)
     access_token = create_access_token(user_model.id)
 
     return jsonify(access_token=access_token)

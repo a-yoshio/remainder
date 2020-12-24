@@ -11,27 +11,33 @@ export async function login(mailAddress: string, password: string): Promise<Bool
     if (!resData['access_token'] || !resData['refresh_token']) {
         throw Error('login failed: response is wrong')
     }
-    Cookies.set('act', resData['access_token'], { expires: 2, path: '/' })
-    Cookies.set('rft', resData['refresh_token'], { expires: 30, path: '/' })
+    Cookies.set('act', resData['access_token'], { expires: 200000, path: '/' })
+    Cookies.set('rft', resData['refresh_token'], { expires: 200000, path: '/' })
     return true
 }
 
-export async function checkToken(request: any): Promise<Boolean> {
-    if (!request.headers.cookie) {
+export async function checkToken(request?: any): Promise<Boolean> {
+    // Cookieの中をチェック
+    if (Cookies.get('act')) {
+        return true
+    } else if (Cookies.get('rft')) {
+        await authRepository.refresh()
+        return true
+    } else if (!request) {// Cookieの中に何もなかったら、httpリクエストをチェック
         return false
-    }
+    } else if (!request.headers.cookie) { // httpリクエストのcookieをチェック
+        return false
+    } 
+    // httpリクエストのcookieの中身を分解して、必要なものを取得
     const cookieMap = convertCookieToMap(request.headers.cookie)
     if (!cookieMap.has('rft')) {
         return false
     } else if (!cookieMap.has('act')) {
         Cookies.set('rft', cookieMap.get('rft') as string)
-        const data = await authRepository.refresh()
-        return true
-    }        
- else {
+        await authRepository.refresh()
         return true
     }
-    
+    return false
 }
 
 export function convertCookieToMap(cookie: string): Map<string, string> {

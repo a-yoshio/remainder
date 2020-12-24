@@ -19,7 +19,7 @@ export class BaseRepository {
             return {
                 headers: {
                     'Authorization': 'Bearer ' + setToken
-                }
+                } 
             }
         } else {
             return {}
