@@ -144,6 +144,7 @@ export default {
   async asyncData({params}) {
     await remainderModule.get(params.id)
   },
+  middleware: 'authenticated',
   computed: {
     contentsErrors() {
       return validateContents(this.$v.mContents);
@@ -193,7 +194,6 @@ export default {
     allowedMinutes: (v) => v >= 5 && v <= 55,
     allowedStep: (m) => m % 5 === 0,
     async submit() {
-      console.log("submit!");
       this.showError = false;
       this.errorMessage = "";
       // fire
@@ -214,7 +214,6 @@ export default {
         }
         this.$router.push("/remainder");
       }
-      console.log(this.submitStatus);
     },
     clear() {
       this.$v.$reset();

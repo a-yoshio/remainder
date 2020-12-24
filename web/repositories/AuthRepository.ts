@@ -11,4 +11,9 @@ export class AuthRepository extends BaseRepository{
         const response = await super.post(param, undefined)
         return response.data
     }
+
+    async refresh(): Promise<any> {
+        const response = await super.get(undefined, '/refresh')
+        return response.data
+    }
 }

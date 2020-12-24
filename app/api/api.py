@@ -1,13 +1,13 @@
-from flask import (Flask, request, jsonify)
+from flask import (Flask, request, jsonify, )
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from flask_bcrypt import Bcrypt
-from flask_jwt_extended import (JWTManager)
+from flask_jwt_extended import (JWTManager, jwt_refresh_token_required, get_jwt_identity, jwt_required,
+                                set_access_cookies, set_refresh_cookies)
 
 import app.service.remainder_service as remainder_service
 import app.service.tag_service as tag_service
 import app.service.auth_service as auth_service
-import app.service.user_service as user_service
 from app.config.application_config import configure_app
 from app.form.remainder import Remainder
 from app.form.tag import Tag
@@ -26,14 +26,24 @@ jwt = JWTManager(app)
 def auth():
     try:
         data = request.json
-        print(data)
         return auth_service.auth(data['mail_address'], data['password'])
     except BaseException as e:
         print(e)
-        return str(e), 400
+        return str(e), 401
+
+@app.route('/auth/refresh', methods=['GET'])
+@jwt_refresh_token_required
+def refresh():
+    try:
+        id = get_jwt_identity()
+        return auth_service.refresh(id)
+    except BaseException as e:
+        print(e)
+        return str(e), 500
 
 
 @app.route('/remainder', methods=['GET'])
+@jwt_required
 def get_remainder_list():
     try:
         # TODO: use applied userId
@@ -50,9 +60,10 @@ def get_remainder_list():
             raise TypeError(f'user_id must be int type')
     except BaseException as e:
         print(e)
-        return str(e), 400
+        return str(e), 500
 
 @app.route('/remainder/<remainder_id>', methods=['GET'])
+@jwt_required
 def get_remainder(remainder_id: str):
     try:
         if remainder_id.isdigit():
@@ -67,10 +78,11 @@ def get_remainder(remainder_id: str):
             raise TypeError(f'remainder_id must be int type')
     except BaseException as e:
         print(e)
-        return str(e), 400
+        return str(e), 500
 
 
 @app.route('/remainder', methods=['POST'])
+@jwt_required
 def add_remainder():
     try:
         json_data = request.json
@@ -90,6 +102,7 @@ def add_remainder():
         return str(e), 500
 
 @app.route('/remainder/<remainder_id>', methods=['POST'])
+@jwt_required
 def update_remainder(remainder_id:str):
     try:
         json_data = request.json
@@ -108,6 +121,7 @@ def update_remainder(remainder_id:str):
         return str(e), 500
 
 @app.route('/remainder/<remainder_id>', methods=['DELETE'])
+@jwt_required
 def delete_remainder(remainder_id: str):
     try:
         remainder_id = int(remainder_id)
@@ -120,6 +134,7 @@ def delete_remainder(remainder_id: str):
 
 # Tag
 @app.route('/remainder/tag', methods=['GET'])
+@jwt_required
 def get_tag_list():
     try:
         # TODO: use applied userId
@@ -136,10 +151,11 @@ def get_tag_list():
             raise TypeError(f'user_id must be int type')
     except BaseException as e:
         print(e)
-        return str(e), 400
+        return str(e), 500
 
 
 @app.route('/remainder/tag/<tag_id>', methods=['GET'])
+@jwt_required
 def get_tag(tag_id: str):
     try:
         if tag_id.isdigit():
@@ -154,10 +170,11 @@ def get_tag(tag_id: str):
             raise TypeError(f'tag_id must be int type')
     except BaseException as e:
         print(e)
-        return str(e), 400
+        return str(e), 500
 
 
 @app.route('/remainder/tag', methods=['POST'])
+@jwt_required
 def add_tag():
     try:
         json_data = request.json
@@ -175,6 +192,7 @@ def add_tag():
         return str(e), 500
 
 @app.route('/remainder/tag/<tag_id>', methods=['POST'])
+@jwt_required
 def update_tag(tag_id:str):
     try:
         json_data = request.json
@@ -192,6 +210,7 @@ def update_tag(tag_id:str):
         return str(e), 500
 
 @app.route('/remainder/tag/<tag_id>', methods=['DELETE'])
+@jwt_required
 def delete_tag(tag_id: str):
     try:
         tag_id = int(tag_id)
@@ -203,5 +222,6 @@ def delete_tag(tag_id: str):
         return str(e), 500
 
 if __name__ == '__main__':
+    print(app.config)
     db.init_app(app)
     app.run(debug=True)

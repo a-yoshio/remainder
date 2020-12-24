@@ -56,7 +56,7 @@
   </v-row>
 </template>
 
-<script lang="ts">
+<script>
 import { remaindersModule } from "@/store";
 import movepage from "@/middleware/movepage"
 
@@ -71,18 +71,20 @@ export default {
     };
   },
   async asyncData() {
-    // このページにアクセスが来たときに、実行される。
-    return await remaindersModule.getAll() // storeモジュールのmutation関数を実行
+      // このページにアクセスが来たときに、実行される。
+      return await remaindersModule.getAll() // storeモジュールのmutation関数を実行
   },
+  middleware: 'authenticated',
   computed: {
     remainders() {
       return remaindersModule.remainders
     },
   },
   methods: {
-    next(path: string, remainderId: number) {
-      const url = location.origin + path + '/' + remainderId
-      movepage(url)
+    next(path, remainderId) {
+      // const url = location.origin + path + '/' + remainderId
+      // movepage(url)
+      this.$router.push(path+'/'+remainderId)
     }
   }
 };

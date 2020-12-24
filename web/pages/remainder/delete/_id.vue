@@ -44,6 +44,7 @@ import { remainderModule } from "@/store";
     async asyncData({params}) {
         return await remainderModule.get(params.id)
     },
+    middleware: 'authenticated',
     computed: {
         contents() {
             return remainderModule.contents
@@ -51,8 +52,11 @@ import { remainderModule } from "@/store";
     },
     methods: {
         async deleteRemainder() {
-            await remainderModule.delete()
-            this.$router.push('/remainder')
+            await remainderModule.delete().then(() => 
+              this.$router.push('/remainder')
+            ).catch((err)=> {
+              console.error(err)
+            })
         }
     }
   }

@@ -67,11 +67,12 @@ export default {
     methods: {
       async submit () {
         this.$v.$touch()
-        await authModule.auth({mailAddress: this.mail_address, password: this.password})
-        if (!this.$route.query.pageName || this.$route.query.pageName == 'index') {
+        await authModule.login({mailAddress: this.mail_address, password: this.password})
+        if (!this.$route.query.pageName || this.$route.query.pageName == 'index'
+         || this.$route.query.pageName == 'login') {
             this.$router.push('/remainder')
         } else {
-            this.$router.push(this.$router.query.pageNames)
+            this.$router.push(this.$route.query.pageName)
         }
         
       },
