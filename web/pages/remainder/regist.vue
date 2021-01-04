@@ -105,8 +105,14 @@ import { required } from "vuelidate/lib/validators";
 import { remainderModule } from "@/store";
 import { parse } from "date-fns";
 import { RemainderForm } from "@/forms/Remainder";
+import { tagsModule } from "@/store"
 
 export default {
+  middleware: 'authenticated',
+  async asyncData() {
+      // このページにアクセスが来たときに、実行される。
+      return await tagsModule.getAll()// storeモジュールのmutation関数を実行
+  },
   data() {
     return {
       date: new Date().toISOString().substr(0, 10),
@@ -120,11 +126,6 @@ export default {
         (value) => (value && value.length <= 30) || "Max 30 characters",
       ],
       tag: {},
-      tags: [
-        { id: 1, title: "家" },
-        { id: 2, title: "会社" },
-        { id: 3, title: "遊び" },
-      ],
       complete: true,
       showError: false,
       errorMessage: "",
@@ -142,7 +143,7 @@ export default {
       minLength: 1,
       maxLength: 30,
     },
-    tag: {},
+    tag: { required },
   },
   watch: {
     date(val) {
@@ -155,6 +156,9 @@ export default {
     },
     contentsErrors() {
       return validateContents(this.$v.contents);
+    },
+    tags() {
+      return tagsModule.tags
     },
   },
   methods: {
