@@ -11,8 +11,8 @@ export async function login(mailAddress: string, password: string): Promise<Bool
     if (!resData['access_token'] || !resData['refresh_token']) {
         throw Error('login failed: response is wrong')
     }
-    Cookies.set('act', resData['access_token'], { expires: 200000, path: '/' })
-    Cookies.set('rft', resData['refresh_token'], { expires: 200000, path: '/' })
+    Cookies.set('act', resData['access_token'], { expires: 200000 })
+    Cookies.set('rft', resData['refresh_token'], { expires: 200000 })
     return true
 }
 

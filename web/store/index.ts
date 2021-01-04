@@ -4,8 +4,6 @@ const initializer = (store: Store<any>) => initialiseStores(store)
 export const plugins = [initializer]
 export * from '@/utils/store-accessor'
 
-import Cookies from 'js-cookie'
-
 export const actions = {
     /**
      * サーバー初期化時の処理

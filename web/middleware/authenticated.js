@@ -4,7 +4,7 @@ export default async function ({ store, redirect, route }) {
         return
     }
     // アクセス権限チェック
-    if (!store.state.auth.loginState) {
+    if (!store.state.auth.login_state) {
         // アクセス権限がなかったら、ログインページへ
         return redirect('/login?pageName=' + route.name)    
     } else {

@@ -4,13 +4,13 @@ import { login, checkToken } from '@/services/AuthService';
 @Module({ name: 'auth', namespaced: true, stateFactory: true })
 export default class AuthModule extends VuexModule {
     // state
-    loginState : Boolean = false
+    login_state : Boolean = false
     access_token: string = ''
     refresh_token: string = ''
     // mutation
     @Mutation
     public setLoginState(state: Boolean) {
-        this.loginState = state
+        this.login_state = state
     }
     // action
     @Action({rawError:true})
