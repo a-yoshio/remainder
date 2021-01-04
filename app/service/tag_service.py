@@ -16,6 +16,6 @@ def add_tag(tag: Tag):
 def update_tag(tag: Tag):
     return repository.update(tag)
 
-def delete(tag_id: int):
-    return repository.delete(tag_id)
+def delete(tag_id: int, user_id: int):
+    return repository.delete(tag_id, user_id)
 

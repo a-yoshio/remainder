@@ -10,7 +10,7 @@ class Remainder:
         datetime_check('datetime', self.datetime)
         bool_check('complete', self.complete)
 
-    def __init__(self, user_id: int, contents: str, tag_id: int, datetime: str, complete: bool, remainder_id= 0):
+    def __init__(self, user_id: int, contents: str, tag_id: int, datetime: str, complete: bool, remainder_id= -1):
         self.remainder_id = remainder_id
         self.user_id = user_id
         self.contents = contents

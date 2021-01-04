@@ -87,6 +87,7 @@
           dense
         >
         </v-select>
+        <TagRegist />
       </v-col>
       <v-switch
         v-model="complete"
@@ -106,9 +107,13 @@ import { remainderModule } from "@/store";
 import { parse } from "date-fns";
 import { RemainderForm } from "@/forms/Remainder";
 import { tagsModule } from "@/store"
+import TagRegist from  "@/components/TagRegist";
 
 export default {
   middleware: 'authenticated',
+  component: {
+    TagRegist
+  },
   async asyncData() {
       // このページにアクセスが来たときに、実行される。
       return await tagsModule.getAll()// storeモジュールのmutation関数を実行
@@ -211,6 +216,9 @@ export default {
       (this.time = "12:00"), (this.contents = "");
       this.tag = {};
     },
+    onCreateTag() {
+      
+    }
   },
 };
 </script>

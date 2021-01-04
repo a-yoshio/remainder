@@ -166,7 +166,7 @@ def add_tag():
     try:
         json_data = request.json
         id = get_jwt_identity()
-        tag_form: Tag = Tag(json_data['title'], json_data['colors'], id)
+        tag_form: Tag = Tag(json_data['title'], json_data['color'], id)
         tag_form.validateForInsert()
         result_flg, msg = tag_service.add_tag(tag_form)
         if result_flg:
@@ -184,7 +184,7 @@ def update_tag(tag_id:str):
     try:
         json_data = request.json
         id = get_jwt_identity()
-        tag_form: Tag = Tag(json_data['title'], json_data['colors'], id, json_data['id'])
+        tag_form: Tag = Tag(json_data['title'], json_data['color'], id, json_data['id'])
         tag_form.validateForUpdate()
         tag_id = int(tag_id)
         if tag_id != tag_form.id:
@@ -201,8 +201,9 @@ def update_tag(tag_id:str):
 @jwt_required
 def delete_tag(tag_id: str):
     try:
+        id = get_jwt_identity()
         tag_id = int(tag_id)
-        result_flg, msg = tag_service.delete(tag_id)
+        result_flg, msg = tag_service.delete(tag_id, id)
         return msg, 200
     except BaseException as e:
         print('faild tag delete')

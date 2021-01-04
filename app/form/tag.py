@@ -4,13 +4,13 @@ class Tag:
 
     def __validation(self):
         str_check('title', self.title)
-        str_check('colors', self.colors)
+        str_check('color', self.color)
         int_check('user_id', self.user_id)
 
-    def __init__(self, title: str, colors: str, user_id: int, tag_id = 0):
+    def __init__(self, title: str, color: str, user_id: int, tag_id = -1):
         self.id = tag_id
         self.title = title
-        self.colors = colors
+        self.color = color
         self.user_id = user_id
 
     def validateForInsert(self):

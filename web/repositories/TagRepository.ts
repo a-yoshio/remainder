@@ -17,6 +17,12 @@ export class TagRepository extends BaseRepository{
         return tags
     }
 
+    async insert(tag: TagModel): Promise<Boolean> {
+        const jsonData = tag.createJsonParam()
+        await super.post(jsonData, undefined)
+        return true
+    }
+
     private convertObject(obj: any): TagModel {
         return new TagModel(
             obj.title,

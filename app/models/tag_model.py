@@ -21,7 +21,7 @@ class TagModel(db.Model):
         }
     def set_param(self, tag_form: Tag):
         self.title = tag_form.title
-        self.color = tag_form.colors
+        self.color = tag_form.color
         self.user_id = tag_form.user_id
-        if tag_form.id != 0:
+        if tag_form.id != -1:
             self.id = tag_form.id

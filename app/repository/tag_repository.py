@@ -1,5 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
-from app.repository import convert_query_data_to_list
+from app.repository import (convert_query_data_to_list, check_user)
 from app.models.tag_model import TagModel
 from app.form.tag import Tag as TagForm
 
@@ -24,6 +24,7 @@ class TagRepository():
 
     def insert(self, tag_from: TagForm):
         try:
+            print('start insert tag')
             model = TagModel()
             model.set_param(tag_from)
             db.session.add(model)
@@ -35,9 +36,10 @@ class TagRepository():
 
     def update(self, tag: TagForm):
         try:
-            print('start insert or update tag data')
+            print('start update tag')
             # update
             tag_model: TagModel = db.session.query(TagModel).filter_by(id=tag.id).first()
+            check_user(tag_model.user_id, tag.user_id)
             tag_model.set_param(tag)
             db.session.add(tag_model)
             db.session.commit()
@@ -46,10 +48,11 @@ class TagRepository():
             db.session.rollback()
             raise e
 
-    def delete(self, tag_id:int):
+    def delete(self, tag_id:int, user_id: int):
         try:
-            tag = db.session.query(TagModel).filter_by(id=tag_id).first()
-            db.session.delete(tag)
+            tag_model = db.session.query(TagModel).filter_by(id=tag_id).first()
+            check_user(tag_model.user_id, user_id)
+            db.session.delete(tag_model)
             db.session.commit()
             return True, 'delete success'
         except BaseException as e:

@@ -72,7 +72,9 @@ export default {
          || this.$route.query.pageName == 'login') {
             this.$router.push('/remainder')
         } else {
-            this.$router.push(this.$route.query.pageName)
+            const nextPage = this.$route.query.pageName.toString().replace('-', '/')
+            console.log('>>>>> next: ', nextPage)
+            this.$router.push(nextPage)
         }
         
       },
