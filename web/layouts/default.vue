@@ -32,6 +32,7 @@
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       <v-toolbar-title v-text="title" />
       <v-spacer />
+      <RemainderConfigMenu />
     </v-app-bar>
     <v-main>
       <v-container>
@@ -48,7 +49,11 @@
 </template>
 
 <script>
+import RemainderConfigMenu from '@/components/RemainderConfigMenu'
 export default {
+  components: {
+    RemainderConfigMenu
+  },
   data () {
     return {
       clipped: false,
@@ -71,6 +76,6 @@ export default {
       rightDrawer: false,
       title: 'Remainder'
     }
-  }
+  },
 }
 </script>

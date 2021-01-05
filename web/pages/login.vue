@@ -50,6 +50,9 @@ export default {
       mail_address: { required },
       password: { required },
     },
+    created() {
+      authModule.setLoginState(false)
+    },
     computed: {
         mailAddressError(){
             const errors = []
