@@ -86,6 +86,10 @@
           return-object
           dense
         >
+          <template v-slot:item="{ item }">
+            <span>{{ item.title }}</span>
+            <div class="box-color" v-bind:style="{backgroundColor:item.color}"/>
+          </template>
         </v-select>
         <TagRegist />
       </v-col>
@@ -216,9 +220,15 @@ export default {
       (this.time = "12:00"), (this.contents = "");
       this.tag = {};
     },
-    onCreateTag() {
-      
-    }
   },
 };
 </script>
+<style scoped lang="scss">
+.box-color {
+    width: 10px;
+    height: 10px;
+    margin: 5px;
+    border-radius: 10px; 
+}
+
+</style>

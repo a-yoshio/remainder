@@ -2,14 +2,14 @@ import { BaseModel } from "./BaseModel";
 import { format } from "date-fns";
 
 export class RemainderModel extends BaseModel{
-    id?: number;
+    id: number;
     contents: string;
     user_id: number;
     tag_id: number;
     datetime: Date;
     complete: boolean;
     disp_datetime: string;
-    constructor(contents: string, userId: number, tagId: number, datetime: string|Date, complete: boolean, id?: number) {
+    constructor(contents: string, userId: number, tagId: number, datetime: string|Date, complete: boolean, id: number = -1) {
         super()
         this.id = id;
         this.contents = contents;

@@ -78,7 +78,7 @@
       </v-col>
       <v-col class="d-flex" cols="12" sm="6">
         <v-select
-          v-model="tag"
+          v-model="mTag"
           :items="tags"
           item-text="title"
           item-value="id"
@@ -86,7 +86,12 @@
           return-object
           dense
         >
+          <template v-slot:item="{ item }">
+            <span>{{ item.title }}</span>
+            <div class="box-color" v-bind:style="{backgroundColor:item.color}"/>
+          </template>
         </v-select>
+        <TagRegist />
       </v-col>
       <v-switch
         v-model="mComplete"
@@ -94,7 +99,6 @@
         :label="`Complete : ${mComplete}`"
       ></v-switch>
       <v-btn class="mr-4" @click="submit"> submit </v-btn>
-      <v-btn class="mr-4" @click="clear"> clear </v-btn>
       <v-btn to="/remainder" nuxt> cancel </v-btn>
     </form>
   </v-card>
@@ -102,11 +106,16 @@
 <script>
 import { validateContents } from "@/utils/validation";
 import { required } from "vuelidate/lib/validators";
-import { remainderModule } from "@/store";
+import { remainderModule, tagsModule } from "@/store";
 import { parse } from "date-fns";
 import { RemainderForm } from "@/forms/Remainder";
+import TagRegist from "@/components/TagRegist"
+
 
 export default {
+  components: {
+    TagRegist
+  },
   data() {
     return {
       date: '',
@@ -116,12 +125,6 @@ export default {
       rules: [
         (value) => !!value || "Required.",
         (value) => (value && value.length <= 30) || "Max 30 characters",
-      ],
-      tag: {id: 1, title: "家"},
-      tags: [
-        { id: 1, title: "家" },
-        { id: 2, title: "会社" },
-        { id: 3, title: "遊び" },
       ],
       showError: false,
       errorMessage: "",
@@ -143,6 +146,7 @@ export default {
   },
   async asyncData({params}) {
     await remainderModule.get(params.id)
+    await tagsModule.getAll()
   },
   middleware: 'authenticated',
   computed: {
@@ -175,6 +179,23 @@ export default {
         remainderModule.setContents(newValue)
       },
     },
+    mTag: {
+      get: function () {
+        let displayTag = tagsModule.tags[0]
+        for(const tag of tagsModule.tags) {
+          console.log('get', tag.id)
+          if(tag.id == remainderModule.tag_id) {
+            console.log('OK:', tag)   
+            displayTag = tag
+          }
+        }
+        console.log('get', displayTag)
+        return displayTag
+      }, 
+      set: function (newValue) {
+        remainderModule.setTagId(newValue.id)
+      }
+    },
     mComplete: {
       get: function () {
         return remainderModule.complete
@@ -183,11 +204,14 @@ export default {
         remainderModule.setComplete(newValue)
       },
     },
+    tags() {
+      return tagsModule.tags;
+    }
   },
   watch: {
     date(val) {
       remainderModule.setDate(this.date)
-    }
+    },
   },
   methods: {
     allowedHours: (v) => v % 2,
@@ -211,16 +235,20 @@ export default {
         if (!result) {
           this.errorMessage = "Server Error";
           this.showError = true;
+        } else {
+          this.$router.push("/remainder");
         }
-        this.$router.push("/remainder");
       }
-    },
-    clear() {
-      this.$v.$reset();
-      this.date = new Date().toISOString().substr(0, 10);
-      (this.time = "12:00"), (this.contents = "");
-      this.tag = {};
     },
   },
 };
 </script>
+<style scoped lang="scss">
+.box-color {
+    width: 10px;
+    height: 10px;
+    margin: 5px;
+    border-radius: 10px; 
+}
+
+</style>

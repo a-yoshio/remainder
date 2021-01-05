@@ -1,11 +1,11 @@
 export class RemainderForm {
-    id?: number;
+    id: number;
     contents: string;
     userId: number;
     tagId: number;
     datetime: Date;
     complete: boolean;
-    constructor(contents: string, userId: number, tagId: number, datetime: Date, complete: boolean, id: number) {
+    constructor(contents: string, userId: number, tagId: number, datetime: Date, complete: boolean, id: number=-1) {
         this.id = id;
         this.contents = contents;
         this.userId = userId

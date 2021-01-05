@@ -46,6 +46,11 @@ export default class RemainderModule extends VuexModule {
     }
 
     @Mutation
+    public setTagId(tagId: number) {
+        this.tag_id = tagId
+    }
+
+    @Mutation
     public setComplete(complete: boolean) {
         this.complete = complete
     }    
