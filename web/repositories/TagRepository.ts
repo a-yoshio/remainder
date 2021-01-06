@@ -6,6 +6,13 @@ export class TagRepository extends BaseRepository{
         super('/remainder/tag')
     }
 
+    async selectFromId(tagId: number): Promise<TagModel> {
+        const response = await super.get(undefined, tagId.toString())
+        const objRemainder = response.data.tag
+        const tag = this.convertObject(objRemainder)
+        return tag
+    }
+
     async selectAll(): Promise<Array<TagModel>> {
         const response = await super.get()
         const tagData = response.data.tag_list
@@ -29,5 +36,19 @@ export class TagRepository extends BaseRepository{
             obj.color,
             obj.id
         )
+    }
+
+    async update(tag:　TagModel): Promise<Boolean> {
+        let tagMap = tag.createJsonParam()
+        if (tag.id == -1) {
+            throw Error('[update]Invalide tag id')
+        } else {
+            await super.post(tagMap, tag.id.toString())
+            return true
+        }
+    }
+
+    async deleteTag(remainderId: number): Promise<Boolean> {
+        return await super.delete(remainderId.toString())
     }
 }

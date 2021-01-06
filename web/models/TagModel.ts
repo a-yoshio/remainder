@@ -1,7 +1,7 @@
 import { BaseModel } from "./BaseModel";
 
 export class TagModel extends BaseModel{
-    id?: number;
+    id: number;
     title: string;
     color: string;
     constructor(title: string, color: string, id= -1) {

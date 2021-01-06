@@ -82,8 +82,6 @@ export default {
   },
   methods: {
     next(path, remainderId) {
-      // const url = location.origin + path + '/' + remainderId
-      // movepage(url)
       this.$router.push(path+'/'+remainderId)
     }
   }

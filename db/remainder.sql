@@ -19,7 +19,8 @@ CREATE TABLE tag (
 id serial PRIMARY KEY,
 title varchar(20),
 color varchar(7),
-user_id int
+user_id int,
+on_delete boolean DEFAULT false NOT NULL
 );
 
 INSERT INTO users (name, password, mail_address, last_login) VALUES ('yoshino', '$2b$12$qtcq4AsbSuAmahIY6jgSPeMA5/dxpA8zfeFsguuJAoyaYYJeQ4LfS', 'test@gmail.com', '2020-09-27 00:00:00.000000');

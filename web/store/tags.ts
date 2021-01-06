@@ -1,7 +1,6 @@
 import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators'
 import { TagModel } from '@/models/TagModel'
-import { getAll, regist } from '~/services/TagService'
-import { TagForm } from '~/forms/Tag'
+import { getAll } from '~/services/TagService'
 
 @Module({ name: 'tags', namespaced: true, stateFactory: true })
 export default class TagsModule extends VuexModule {
@@ -20,10 +19,5 @@ export default class TagsModule extends VuexModule {
     public async getAll() {
         const tags = await getAll()
         this.setTags(tags)
-    }
-
-    @Action({rawError:true})
-    public async regist(tag: TagForm) {
-        return await regist(tag)
     }
 }

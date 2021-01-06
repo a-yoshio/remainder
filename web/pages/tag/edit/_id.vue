@@ -1,19 +1,6 @@
 <template>
   <v-row justify="center">
     <v-dialog v-model="dialog" persistent max-width="600px">
-      <template v-slot:activator="{ on, attrs }">
-        <v-btn
-          class="mx-2"
-          fab
-          dark
-          small
-          color="#272727"
-          v-bind="attrs"
-          v-on="on"
-        >
-          <v-icon dark> mdi-plus </v-icon>
-        </v-btn>
-      </template>
       <v-card>
         <v-col cols="d-flex">
             <v-alert v-show="showError" dense outlined type="error">
@@ -21,20 +8,20 @@
             </v-alert>
         </v-col>
         <v-card-title>
-          <span class="headline">Create New Tag</span>
+          <span class="headline">Edit Tag</span>
         </v-card-title>
         <v-card-text>
           <v-container>
             <v-row>
               <v-col cols="12" sm="6" md="4">
-                <v-text-field label="Title" v-model="title" required></v-text-field>
+                <v-text-field label="Title" v-model="mTitle" required></v-text-field>
               </v-col>
             </v-row>
             <v-row>
               <v-col cols="12" sm="6" md="4">
                 <v-col cols="8">
                     <v-select
-                    v-model="color"
+                    v-model="mColor"
                     :items="$tagColors"
                     item-text="id"
                     item-value="hex"
@@ -48,7 +35,7 @@
                     </template>
                     </v-select>
                 </v-col>
-                <v-col cols="6" v-bind:style="{backgroundColor:color.hex}">
+                <v-col cols="6" v-bind:style="{backgroundColor:mColor}">
                 </v-col>
               </v-col>
             </v-row>
@@ -56,11 +43,11 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="dialog = false">
+          <v-btn color="blue darken-1" to="/tag">
             Close
           </v-btn>
           <v-btn color="blue darken-1" text @click="submit">
-            Create
+            Save
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -74,56 +61,65 @@ import { tagModule } from "@/store";
 
 export default {
   data: () => ({
-    dialog: false,
-    color: {},
-    title: '',
+    dialog: true,
     showError: false,
     errorMessage: "",
   }),
-  created() {
-    this.color = this.$tagColors[0]
-  },
-  validations: {
-      title: {
-        required
-      },
-      color: {
-        required
+  async asyncData({ params, error }) {
+      try {
+        await tagModule.getTag(params.id)
+      } catch(e) {
+          console.error(e)
+          error(e);
       }
   },
+  middleware: 'authenticated',
   methods: {
-    clear() {
-        this.title=''
-        this.color = this.$tagColors[0]
-    },
     async submit() {
         this.showError = false;
         this.errorMessage = '';
-        // fire
-        this.$v.$touch();
-        // check invalid
-        if (this.$v.$invalid) {
+        if (!tagModule.validate()) {
             this.errorMessage = "title, color are required. Please enter anything.";
             this.showError = true;
         } else {
-            // do your submit logic here
-            const newTag = new TagForm(
-                this.title,
-                this.color.hex
-            );
-            const result = await tagModule.regist(newTag);
-            if (!result) {
+            try {
+                const result = await tagModule.update();
+                if (!result) {
+                    this.errorMessage = "Server Error";
+                    this.showError = true;
+                    return
+                } else {
+                    this.$router.push('/tag')
+                    return
+                }
+            } catch(e) {
                 this.errorMessage = "Server Error";
                 this.showError = true;
+                console.error(e)
                 return
-            } else {
-                this.clear()
-                tagsModule.getAll()
-                this.dialog = false
-                return
-            }
+            } 
         }
     },
+  },
+computed: {
+    mTitle: {
+        // getter 関数
+        get: function () {
+            return tagModule.title
+        },
+        // setter 関数
+        set: function (newValue) {
+            tagModule.setTitle(newValue)
+        }
+    },
+    mColor: {
+        get: function () {
+            return tagModule.color
+        },
+        set: function (newValue) {
+            tagModule.setColor(newValue.hex)
+        },
+    }, 
   },
 };
 </script>
