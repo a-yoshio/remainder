@@ -61,20 +61,20 @@ export default {
       fixed: false,
       items: [
         {
-          icon: 'mdi-apps',
-          title: 'Welcome',
+          icon: 'mdi-home-circle-outline',
+          title: 'Top',
           to: '/'
         },
         {
-          icon: 'mdi-chart-bubble',
-          title: 'Inspire',
-          to: '/inspire'
+          icon: 'mdi-notebook-check-outline',
+          title: 'Remainder',
+          to: '/remainder'
         }
       ],
       miniVariant: false,
       right: true,
       rightDrawer: false,
-      title: 'Remainder'
+      title: 'OriTool'
     }
   },
 }

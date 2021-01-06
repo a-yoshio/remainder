@@ -1,5 +1,6 @@
 <template>
   <v-row>
+    <v-text class="text-h1">Remainder</v-text>
     <v-btn
       block
       depressed
@@ -27,9 +28,13 @@
                 <v-list-item-content>{{
                   remainder.tag_id
                 }}</v-list-item-content>
-                <v-list-item-content>{{
-                  remainder.complete
-                }}</v-list-item-content>
+                <v-list-item-content>
+                  <v-switch
+                    v-model="remainder.complete"
+                    inset
+                    :label="`Complete : ${remainder.complete}`"
+                  ></v-switch>
+                </v-list-item-content>
               </v-list-item-content>
               <v-card-actions>
                 <v-menu offset-y>
