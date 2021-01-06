@@ -14,7 +14,7 @@ class TagRepository():
     def get_with_tag_id(self, tag_id: object):
         print('check tag')
         tag_data = TagModel.query.filter_by(id=tag_id).one_or_none()
-        return tag_data.to_dict()
+        return tag_data
 
 
     def get_with_user_id(self, tag_id: int):

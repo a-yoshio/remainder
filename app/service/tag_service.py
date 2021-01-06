@@ -4,7 +4,7 @@ from app.form.tag import Tag
 repository = TagRepository()
 
 def get(id: int):
-    return repository.get_with_tag_id(id)
+    return repository.get_with_tag_id(id).to_dict()
 
 def get_with_user_id(user_id: int):
     return repository.get_with_user_id(user_id)

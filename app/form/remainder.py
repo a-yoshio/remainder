@@ -1,20 +1,24 @@
 from app.form import (None_check, str_check, int_check, datetime_check, bool_check)
 from datetime import datetime
 
+from app.form.tag import Tag
+
+
 class Remainder:
 
     def __validation(self):
         int_check('user_id', self.user_id)
         str_check('contents', self.contents)
-        int_check('tag_id', self.tag_id)
+        None_check('tag_id', self.tag)
         datetime_check('datetime', self.datetime)
         bool_check('complete', self.complete)
 
-    def __init__(self, user_id: int, contents: str, tag_id: int, datetime: str, complete: bool, remainder_id= -1):
+    def __init__(self, user_id: int, contents: str, tag: dict, datetime: str, complete: bool, remainder_id= -1):
         self.remainder_id = remainder_id
         self.user_id = user_id
         self.contents = contents
-        self.tag_id = tag_id
+        tag_form = Tag(tag['title'], tag['color'], tag['id'])
+        self.tag = tag_form
         self.datetime = datetime
         self.complete = complete
 

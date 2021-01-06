@@ -25,7 +25,7 @@ class RemainderModel(db.Model):
     def set_param(self, remainder_form: Remainder):
         self.user_id = remainder_form.user_id
         self.contents = remainder_form.contents
-        self.tag_id = remainder_form.tag_id
+        self.tag_id = remainder_form.tag.id
         self.datetime = remainder_form.parse_date_type()
         self.complete = remainder_form.complete
         if remainder_form.remainder_id != -1:

@@ -1,5 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from app.models.remainder_model import RemainderModel
+from app.models.tag_model import TagModel
 from app.repository import (convert_query_data_to_list, check_user)
 from app.form.remainder import Remainder as RemainderForm
 
@@ -16,8 +17,9 @@ class RemainderRepository():
         return remainder
 
     def get_with_user_id(self, user_id: int):
-        remainder_list = RemainderModel.query.filter_by(user_id=user_id).all()
-        return convert_query_data_to_list(remainder_list)
+        remainder_list = db.session.query(RemainderModel, TagModel).join(TagModel, RemainderModel.tag_id==TagModel.id)\
+            .filter(RemainderModel.user_id == user_id).all()
+        return remainder_list
 
     def insert(self, remainder: RemainderForm):
         try:
