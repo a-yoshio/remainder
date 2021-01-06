@@ -7,7 +7,7 @@
     >
       <v-card>
         <v-card-title class="headline">
-          Do you want to remove the {{  }} Tag?
+          Do you want to remove the '{{ title }}' Tag?
         </v-card-title>
         <v-card-text>If you agree, the tag will be removed.</v-card-text>
         <v-card-actions>
@@ -15,7 +15,7 @@
           <v-btn
             color="green darken-1"
             text
-            to="/remainder"
+            to="/tag"
             nuxt
           >
             Disagree
@@ -23,7 +23,7 @@
           <v-btn
             color="green darken-1"
             text
-            @click="deleteRemainder"
+            @click="deleteTag"
           >
             Agree
           </v-btn>
@@ -33,7 +33,7 @@
   </v-row>
 </template>
 <script>
-import { remainderModule } from "@/store";
+import { tagModule } from "@/store";
 
   export default {
     data () {
@@ -42,18 +42,18 @@ import { remainderModule } from "@/store";
       }
     },
     async asyncData({params}) {
-        return await remainderModule.get(params.id)
+        return await tagModule.getTag(params.id)
     },
     middleware: 'authenticated',
     computed: {
-        contents() {
-            return remainderModule.contents
-        }
+        title() {
+          return tagModule.title
+        },
     },
     methods: {
-        async deleteRemainder() {
-            await remainderModule.delete().then(() => 
-              this.$router.push('/remainder')
+        async deleteTag() {
+            await tagModule.delete().then(() => 
+              this.$router.push('/tag')
             ).catch((err)=> {
               console.error(err)
             })

@@ -28,7 +28,6 @@ export default {
     },
     computed: {
         loginStatus() {
-            console.log('get', authModule.login_state)
             return authModule.login_state
         }
     }

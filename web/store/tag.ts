@@ -46,6 +46,7 @@ export default class TagModule extends VuexModule {
         this.setTitle(tagModel.title)
         this.setColor(tagModel.color)
         this.setId(tagModel.id)
+        return tagModel
     }
 
     @Action({rawError:true})
@@ -59,8 +60,11 @@ export default class TagModule extends VuexModule {
     }
 
     @Action({rawError:true})
-    public async delete(tagId: number) {
-        const result = await deleteTag(tagId)
+    public async delete() {
+        if (!this.id) {
+            throw Error('tag id　is not define.')
+        }
+        const result = await deleteTag(this.id)
         this.clear()
         return result
     }

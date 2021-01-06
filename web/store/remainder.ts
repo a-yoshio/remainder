@@ -1,7 +1,9 @@
 import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators'
 import { RemainderModel } from '@/models/Remainder'
 import { regist, update, get, deleteRemainder } from '@/services/RemainderService'
+import { get as getTag } from '@/services/TagService'
 import { RemainderForm } from '../forms/Remainder'
+import { TagModel } from '../models/TagModel'
 
 @Module({ name: 'remainder', namespaced: true, stateFactory: true })
 export default class RemainderModule extends VuexModule {
@@ -9,7 +11,7 @@ export default class RemainderModule extends VuexModule {
     id: number = 0
     contents: string = ''
     user_id: number = 0
-    tag_id: number = 0
+    tag: TagModel|null = null
     datetime: Date|null = null
     date: string = ''
     time: string = ''
@@ -20,7 +22,6 @@ export default class RemainderModule extends VuexModule {
         this.id = remainder.id as number
         this.contents = remainder.contents
         this.user_id = remainder.user_id
-        this.tag_id = remainder.tag_id
         this.datetime = remainder.datetime
         this.complete = remainder.complete
         this.date = remainder.getDate()
@@ -46,8 +47,8 @@ export default class RemainderModule extends VuexModule {
     }
 
     @Mutation
-    public setTagId(tagId: number) {
-        this.tag_id = tagId
+    public setTag(tag: TagModel) {
+        this.tag = tag
     }
 
     @Mutation
@@ -60,6 +61,8 @@ export default class RemainderModule extends VuexModule {
     public async get(remainderId: number): Promise<void> {
         const remainder:RemainderModel = await get(remainderId)
         this.setRemainder(remainder)
+        const tag = await getTag(remainder.tag_id)
+        this.setTag(tag)
         return
     }
 
@@ -76,8 +79,9 @@ export default class RemainderModule extends VuexModule {
     public async update() {
         const strNewDateTime:string = this.date + 'T' + this.time
         const newDateTime = new Date(strNewDateTime)
-        return await update(this.user_id, this.contents, this.tag_id, newDateTime, this.complete, this.id as number)
+        return await update(this.user_id, this.contents, this.tag!.id, newDateTime, this.complete, this.id as number)
     }
+    
     @Action({rawError:true})
     public async delete() {
         return await deleteRemainder(this.id)

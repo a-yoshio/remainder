@@ -18,7 +18,7 @@ class TagRepository():
 
 
     def get_with_user_id(self, tag_id: int):
-        remainder_list = TagModel.query.filter_by(user_id=tag_id).all()
+        remainder_list = TagModel.query.filter_by(user_id=tag_id, on_delete=False).all()
         return convert_query_data_to_list(remainder_list)
 
 
@@ -52,7 +52,8 @@ class TagRepository():
         try:
             tag_model = db.session.query(TagModel).filter_by(id=tag_id).first()
             check_user(tag_model.user_id, user_id)
-            db.session.delete(tag_model)
+            tag_model.on_delete = True
+            db.session.add(tag_model)
             db.session.commit()
             return True, 'delete success'
         except BaseException as e:

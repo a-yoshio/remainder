@@ -12,7 +12,7 @@
             </v-btn>
           </v-list-item-action>
           <v-list-item-action>
-            <v-btn icon >
+            <v-btn icon @click="deleteTag(tag.id)">
               <v-icon lighten-1>mdi-delete</v-icon>
             </v-btn>
           </v-list-item-action>
@@ -35,8 +35,11 @@ export default {
   },
   middleware: "authenticated",
   methods: {
-    async edit(tagId) {
+    edit(tagId) {
       this.$router.push('/tag/edit/' + tagId)
+    },
+    deleteTag(tagId) {
+      this.$router.push('/tag/delete/' + tagId)
     }
   },
   computed: {

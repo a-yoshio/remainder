@@ -10,7 +10,7 @@ class TagModel(db.Model):
     title = db.Column(db.String(20), null_able=False)
     color = db.Column(db.String(6), null_able=False)
     user_id = db.Column(db.Integer, null_able=False)
-
+    on_delete = db.Column(db.Integer, null_able=False, default=False)
 
     def to_dict(self):
         return {

@@ -48,7 +48,7 @@ export class TagRepository extends BaseRepository{
         }
     }
 
-    async deleteTag(remainderId: number): Promise<Boolean> {
-        return await super.delete(remainderId.toString())
+    async deleteTag(tagId: number): Promise<Boolean> {
+        return await super.delete(tagId.toString())
     }
 }

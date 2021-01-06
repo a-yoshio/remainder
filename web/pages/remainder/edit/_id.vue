@@ -81,7 +81,6 @@
           v-model="mTag"
           :items="tags"
           item-text="title"
-          item-value="id"
           label="Tags"
           return-object
           dense
@@ -106,7 +105,7 @@
 <script>
 import { validateContents } from "@/utils/validation";
 import { required } from "vuelidate/lib/validators";
-import { remainderModule, tagsModule } from "@/store";
+import { remainderModule, tagModule, tagsModule } from "@/store";
 import { parse } from "date-fns";
 import { RemainderForm } from "@/forms/Remainder";
 import TagRegist from "@/components/TagRegist"
@@ -180,20 +179,12 @@ export default {
       },
     },
     mTag: {
+      // mTagのリターン値にPromiseがきてるよ
       get: function () {
-        let displayTag = tagsModule.tags[0]
-        for(const tag of tagsModule.tags) {
-          console.log('get', tag.id)
-          if(tag.id == remainderModule.tag_id) {
-            console.log('OK:', tag)   
-            displayTag = tag
-          }
-        }
-        console.log('get', displayTag)
-        return displayTag
+        return remainderModule.tag
       }, 
       set: function (newValue) {
-        remainderModule.setTagId(newValue.id)
+        remainderModule.setTag(newValue)
       }
     },
     mComplete: {

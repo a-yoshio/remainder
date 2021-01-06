@@ -70,7 +70,7 @@
 <script>
 import { required } from "vuelidate/lib/validators";
 import { TagForm } from "@/forms/Tag";
-import { tagModule } from "@/store";
+import { tagModule, tagsModule } from "@/store";
 
 export default {
   data: () => ({
