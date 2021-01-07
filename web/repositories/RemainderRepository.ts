@@ -1,3 +1,4 @@
+import { TagModel } from '~/models/TagModel';
 import { RemainderModel } from '../models/Remainder';
 import { BaseRepository } from './BaseRepository';
 
@@ -48,7 +49,7 @@ export class RemainderRepository extends BaseRepository{
         return new RemainderModel(
             obj.contents,
             obj.user_id,
-            obj.tag_id,
+            new TagModel(obj.tag.title, obj.tag.color, obj.tag.id),
             obj.datetime,
             obj.complete,
             obj.id

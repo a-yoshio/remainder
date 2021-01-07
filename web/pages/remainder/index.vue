@@ -1,6 +1,6 @@
 <template>
   <v-row>
-    <v-text class="text-h1">Remainder</v-text>
+    <div class="text-h1" v-text="title"/>
     <v-btn
       block
       depressed
@@ -16,7 +16,7 @@
     <v-container fluid>
       <v-row dense>
         <v-col v-for="(remainder, index) in remainders" :cols="6" :key="index">
-          <v-card>
+          <v-card :id='"remainder" + remainder.id'>
             <v-list-item three-line>
               <v-list-item-content>
                 <v-list-item-subtitle class="overline mb-4">
@@ -26,14 +26,17 @@
                   {{ remainder.contents }}
                 </v-list-item-subtitle>
                 <v-list-item-content>{{
-                  remainder.tag_id
+                  remainder.tag.title
                 }}</v-list-item-content>
                 <v-list-item-content>
-                  <v-switch
-                    v-model="remainder.complete"
-                    inset
-                    :label="`Complete : ${remainder.complete}`"
-                  ></v-switch>
+                  <v-checkbox
+                    v-model="ex4"
+                    label="Complete!"
+                    color="indigo darken-3"
+                    value="indigo darken-3"
+                    @click="complete(remainder)"
+                    hide-details
+                  ></v-checkbox>
                 </v-list-item-content>
               </v-list-item-content>
               <v-card-actions>
@@ -69,10 +72,12 @@ export default {
   components: {},
   data() {
     return {
+      title: 'Remainder',
       remainder_menu: [
         {title: 'edit', url: '/remainder/edit'},
         {title: 'delete', url: '/remainder/delete'},
       ],
+      complete_id: -1,
     };
   },
   async asyncData() {
@@ -88,10 +93,24 @@ export default {
   methods: {
     next(path, remainderId) {
       this.$router.push(path+'/'+remainderId)
+    },
+    async complete(remainder) {
+      document.getElementById('remainder'+remainder.id).className = 'feadout'
+      try {
+        // TODO: completeしたらstoreにremainderを渡す
+        // reminderModule.complete(remainder)
+      } catch(e) {
+        console.error(e)
+        error(e)
+      }
     }
   }
 };
 </script>
-
 <style lang="scss" scoped>
+.feadout {
+  transition-property: opacity;
+  transition-duration: 1s;
+  opacity: 0;
+}
 </style>

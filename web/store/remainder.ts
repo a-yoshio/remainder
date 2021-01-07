@@ -1,7 +1,6 @@
 import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators'
 import { RemainderModel } from '@/models/Remainder'
 import { regist, update, get, deleteRemainder } from '@/services/RemainderService'
-import { get as getTag } from '@/services/TagService'
 import { RemainderForm } from '../forms/Remainder'
 import { TagModel } from '../models/TagModel'
 
@@ -26,6 +25,7 @@ export default class RemainderModule extends VuexModule {
         this.complete = remainder.complete
         this.date = remainder.getDate()
         this.time = remainder.getTime()
+        this.tag = remainder.tag
     }
 
     @Mutation
@@ -61,8 +61,6 @@ export default class RemainderModule extends VuexModule {
     public async get(remainderId: number): Promise<void> {
         const remainder:RemainderModel = await get(remainderId)
         this.setRemainder(remainder)
-        const tag = await getTag(remainder.tag_id)
-        this.setTag(tag)
         return
     }
 
@@ -79,7 +77,7 @@ export default class RemainderModule extends VuexModule {
     public async update() {
         const strNewDateTime:string = this.date + 'T' + this.time
         const newDateTime = new Date(strNewDateTime)
-        return await update(this.user_id, this.contents, this.tag!.id, newDateTime, this.complete, this.id as number)
+        return await update(this.user_id, this.contents, this.tag!, newDateTime, this.complete, this.id as number)
     }
     
     @Action({rawError:true})

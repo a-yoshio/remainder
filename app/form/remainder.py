@@ -17,7 +17,7 @@ class Remainder:
         self.remainder_id = remainder_id
         self.user_id = user_id
         self.contents = contents
-        tag_form = Tag(tag['title'], tag['color'], tag['id'])
+        tag_form = Tag(tag['title'], tag['color'], user_id, tag['id'])
         self.tag = tag_form
         self.datetime = datetime
         self.complete = complete

@@ -83,7 +83,7 @@ def add_remainder():
         json_data = request.json
         id = get_jwt_identity()
         remainder_form: Remainder = Remainder(id, json_data['contents'], json_data['tag'],
-                                              json_data['datetime'],json_data['complete'], 0)
+                                              json_data['datetime'],json_data['complete'])
         remainder_form.validateForInsert()
         result_flg, msg = remainder_service.add_remainder(remainder_form)
         if result_flg:

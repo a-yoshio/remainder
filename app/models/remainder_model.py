@@ -28,5 +28,4 @@ class RemainderModel(db.Model):
         self.tag_id = remainder_form.tag.id
         self.datetime = remainder_form.parse_date_type()
         self.complete = remainder_form.complete
-        if remainder_form.remainder_id != -1:
-            self.id = remainder_form.remainder_id
+        if remainder_form.remainder_id != -1:            self.id = remainder_form.remainder_id

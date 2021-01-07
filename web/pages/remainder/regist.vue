@@ -112,6 +112,7 @@ import { parse } from "date-fns";
 import { RemainderForm } from "@/forms/Remainder";
 import { tagsModule } from "@/store"
 import TagRegist from  "@/components/TagRegist";
+import { TagForm } from '~/forms/Tag';
 
 export default {
   middleware: 'authenticated',
@@ -126,7 +127,7 @@ export default {
     return {
       date: new Date().toISOString().substr(0, 10),
       menu: false,
-      time: "12:00",
+      time: "00:00",
       modal: false,
       modal2: false,
       contents: "",
@@ -196,13 +197,12 @@ export default {
         this.submitStatus = "PENDING";
         const specifideDateTime = parse(
           this.date + this.time,
-          "yyyy-MM-ddhh:mm",
+          "yyyy-MM-ddHH:mm",
           new Date()
         );
         const newRemainder = new RemainderForm(
           this.contents,
-          1,
-          this.tag.id,
+          this.tag,
           specifideDateTime,
           this.complete
         );

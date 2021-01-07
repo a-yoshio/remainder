@@ -62,6 +62,6 @@ class TagRepository():
 
 
     def tag_exesting_check(self, tag_id):
-        if len(self.get_with_tag_id(tag_id)) == 0:
+        if self.get_with_tag_id(tag_id) == None:
             raise ValueError(f'tag_id "{tag_id}" is not existing.')
 

@@ -107,7 +107,6 @@ import { validateContents } from "@/utils/validation";
 import { required } from "vuelidate/lib/validators";
 import { remainderModule, tagModule, tagsModule } from "@/store";
 import { parse } from "date-fns";
-import { RemainderForm } from "@/forms/Remainder";
 import TagRegist from "@/components/TagRegist"
 
 

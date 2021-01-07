@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-text class="text-h1">Tag List</v-text>
+    <div class="text-h1">Tag List</div>
     <v-card width="50%" top="30px">
       <v-list subheader>
           <v-list-item v-for="(tag, index) in tags" :key="index">

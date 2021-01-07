@@ -1,20 +1,21 @@
 import { BaseModel } from "./BaseModel";
 import { format } from "date-fns";
+import { TagModel } from "@/models/TagModel"
 
 export class RemainderModel extends BaseModel{
     id: number;
     contents: string;
     user_id: number;
-    tag_id: number;
+    tag: TagModel;
     datetime: Date;
     complete: boolean;
     disp_datetime: string;
-    constructor(contents: string, userId: number, tagId: number, datetime: string|Date, complete: boolean, id: number = -1) {
+    constructor(contents: string, userId: number, tag: TagModel, datetime: string|Date, complete: boolean, id: number = -1) {
         super()
         this.id = id;
         this.contents = contents;
         this.user_id = userId
-        this.tag_id = tagId;
+        this.tag = tag;
         if (typeof datetime == 'string') {
             datetime = datetime + ' +0900'
             datetime = new Date(datetime)
@@ -37,7 +38,7 @@ export class RemainderModel extends BaseModel{
             id: this.id,
             contents: this.contents,
             user_id: this.user_id,
-            tag_id: this.tag_id,
+            tag: this.tag.createJsonParam(),
             datetime: this.formatDateTimeForRequest(),
             complete: this.complete
         }
@@ -49,5 +50,9 @@ export class RemainderModel extends BaseModel{
 
     public getTime(): string {
         return format(this.datetime, 'HH:mm')
+    }
+
+    public setComplete(on: boolean): void {
+        this.complete = on
     }
 }
