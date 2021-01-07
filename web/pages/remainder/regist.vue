@@ -136,7 +136,7 @@ export default {
         (value) => (value && value.length <= 30) || "Max 30 characters",
       ],
       tag: {},
-      complete: true,
+      complete: false,
       showError: false,
       errorMessage: "",
     };

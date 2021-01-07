@@ -18,7 +18,7 @@ class RemainderRepository():
 
     def get_with_user_id(self, user_id: int):
         remainder_list = db.session.query(RemainderModel, TagModel).join(TagModel, RemainderModel.tag_id==TagModel.id)\
-            .filter(RemainderModel.user_id == user_id).all()
+            .filter(RemainderModel.user_id == user_id).filter(RemainderModel.complete == False).all()
         return remainder_list
 
     def insert(self, remainder: RemainderForm):

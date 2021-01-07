@@ -52,7 +52,8 @@ export class RemainderModel extends BaseModel{
         return format(this.datetime, 'HH:mm')
     }
 
-    public setComplete(on: boolean): void {
-        this.complete = on
+    public setComplete(onComplete: boolean): void {
+        console.log('>>>>>onComplete', onComplete)
+        this.complete = onComplete
     }
 }

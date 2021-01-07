@@ -15,8 +15,8 @@
     </v-btn>
     <v-container fluid>
       <v-row dense>
-        <v-col v-for="(remainder, index) in remainders" :cols="6" :key="index">
-          <v-card :id='"remainder" + remainder.id'>
+        <v-col v-for="(remainder, index) in remainders" :cols="6" :key="index" :id='"remaindercol" + remainder.id'>
+          <v-card :id='"remaindercard" + remainder.id'>
             <v-list-item three-line>
               <v-list-item-content>
                 <v-list-item-subtitle class="overline mb-4">
@@ -93,14 +93,15 @@ export default {
       this.$router.push(path+'/'+remainderId)
     },
     async complete(remainder) {
-      const remainderElm = document.getElementById('remainder'+remainder.id)
+      const remainderElm = document.getElementById('remaindercard'+remainder.id)
       // target remainder card hidden
       remainderElm.className = 'feadout'
       try {
-            const result = await remainderModule.changeComplete({remainder: remainder, onComplete: true})
+            remainderModule.setRemainder(remainder)
+            const result = await remainderModule.changeComplete(true)
             if (result) {
               // reload
-              this.$router.go({path: this.$router.currentRoute.path, force: true})
+              document.getElementById('remaindercol'+remainder.id).remove()
             } else {
               // target remainder card is show
               remainderElm.remove('feadout')
@@ -116,7 +117,7 @@ export default {
 <style lang="scss" scoped>
 .feadout {
   transition-property: opacity;
-  transition-duration: 1s;
+  transition-duration: 5s;
   opacity: 0;
 }
 </style>

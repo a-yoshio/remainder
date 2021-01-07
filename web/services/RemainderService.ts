@@ -33,8 +33,8 @@ export async function deleteRemainder(remainderId: number){
     return result
 }
 
-export async function changeComplete(remainder: RemainderModel, onComplete: boolean) {
-    remainder.setComplete(onComplete)
-    const result = await remainderRepository.update(remainder)
+export async function changeComplete(userId: number, contents: string, tag: TagModel, datetime: Date, complete: boolean, remianderId: number) {
+    const targetRemainder = new RemainderModel(contents, userId, tag, datetime, complete, remianderId)
+    const result = await remainderRepository.update(targetRemainder)
     return result
 }

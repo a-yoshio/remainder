@@ -86,7 +86,9 @@ export default class RemainderModule extends VuexModule {
     }
 
     @Action({rawError:true})
-    public async changeComplete(param:{remainder: RemainderModel, onComplete: boolean}) {
-        return await changeComplete(param.remainder, param.onComplete)
+    public async changeComplete(onComplete: boolean) {
+        const strNewDateTime:string = this.date + 'T' + this.time
+        const newDateTime = new Date(strNewDateTime)
+        return await changeComplete(this.user_id, this.contents, this.tag!, newDateTime, onComplete, this.id as number)
     }
 }
