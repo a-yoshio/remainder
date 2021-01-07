@@ -1,5 +1,8 @@
 # remainder_web
 
+## Target Browser
+IE9 以上
+
 ## Build Setup
 
 ```bash

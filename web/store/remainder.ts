@@ -1,6 +1,6 @@
 import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators'
 import { RemainderModel } from '@/models/Remainder'
-import { regist, update, get, deleteRemainder } from '@/services/RemainderService'
+import { regist, update, get, deleteRemainder, changeComplete } from '@/services/RemainderService'
 import { RemainderForm } from '../forms/Remainder'
 import { TagModel } from '../models/TagModel'
 
@@ -83,5 +83,10 @@ export default class RemainderModule extends VuexModule {
     @Action({rawError:true})
     public async delete() {
         return await deleteRemainder(this.id)
+    }
+
+    @Action({rawError:true})
+    public async changeComplete(param:{remainder: RemainderModel, onComplete: boolean}) {
+        return await changeComplete(param.remainder, param.onComplete)
     }
 }

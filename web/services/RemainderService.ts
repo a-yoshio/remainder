@@ -32,3 +32,9 @@ export async function deleteRemainder(remainderId: number){
     const result = await remainderRepository.deleteFromRemainderId(remainderId)
     return result
 }
+
+export async function changeComplete(remainder: RemainderModel, onComplete: boolean) {
+    remainder.setComplete(onComplete)
+    const result = await remainderRepository.update(remainder)
+    return result
+}

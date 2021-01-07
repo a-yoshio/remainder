@@ -30,10 +30,9 @@
                 }}</v-list-item-content>
                 <v-list-item-content>
                   <v-checkbox
-                    v-model="ex4"
                     label="Complete!"
                     color="indigo darken-3"
-                    value="indigo darken-3"
+                    value="remiander.id"
                     @click="complete(remainder)"
                     hide-details
                   ></v-checkbox>
@@ -65,7 +64,7 @@
 </template>
 
 <script>
-import { remaindersModule } from "@/store";
+import { remaindersModule, remainderModule } from "@/store";
 import movepage from "@/middleware/movepage"
 
 export default {
@@ -77,7 +76,6 @@ export default {
         {title: 'edit', url: '/remainder/edit'},
         {title: 'delete', url: '/remainder/delete'},
       ],
-      complete_id: -1,
     };
   },
   async asyncData() {
@@ -95,10 +93,18 @@ export default {
       this.$router.push(path+'/'+remainderId)
     },
     async complete(remainder) {
-      document.getElementById('remainder'+remainder.id).className = 'feadout'
+      const remainderElm = document.getElementById('remainder'+remainder.id)
+      // target remainder card hidden
+      remainderElm.className = 'feadout'
       try {
-        // TODO: completeしたらstoreにremainderを渡す
-        // reminderModule.complete(remainder)
+            const result = await remainderModule.changeComplete({remainder: remainder, onComplete: true})
+            if (result) {
+              // reload
+              this.$router.go({path: this.$router.currentRoute.path, force: true})
+            } else {
+              // target remainder card is show
+              remainderElm.remove('feadout')
+            }
       } catch(e) {
         console.error(e)
         error(e)
