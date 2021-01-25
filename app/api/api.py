@@ -8,6 +8,7 @@ from flask_jwt_extended import (JWTManager, jwt_refresh_token_required, get_jwt_
 import app.service.remainder_service as remainder_service
 import app.service.tag_service as tag_service
 import app.service.auth_service as auth_service
+import app.service.user_service as user_service
 from app.config.application_config import configure_app
 from app.form.remainder import Remainder
 from app.form.tag import Tag
@@ -37,6 +38,28 @@ def refresh():
     try:
         id = get_jwt_identity()
         return auth_service.refresh(id)
+    except BaseException as e:
+        print(e)
+        return str(e), 500
+
+
+@app.route('/user/fcm', methods=['POST'])
+@jwt_required
+def update_fcm_token():
+    try:
+        id = get_jwt_identity()
+        json_data = request.json
+        print(json_data)
+        fcm_token = json_data["fcm_token"]
+        _, msg = user_service.update_fcm_token(id, fcm_token)
+        respose_message = jsonify({
+            'status': 'OK',
+            'msg': msg
+        })
+        return respose_message, 200
+    except ValueError as e:
+        print(e)
+        return "request data are wrong: " + str(e), 500
     except BaseException as e:
         print(e)
         return str(e), 500
@@ -212,4 +235,4 @@ def delete_tag(tag_id: str):
 
 if __name__ == '__main__':
     db.init_app(app)
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0', port=80)

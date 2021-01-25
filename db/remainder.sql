@@ -10,9 +10,10 @@ complete boolean
 CREATE TABLE users (
 id serial PRIMARY KEY,
 name varchar(10),
-password varchar(255),
-mail_address varchar(255),
-last_login timestamp
+password varchar(255) NOT NULL,
+mail_address varchar(255) NOT NULL ,
+last_login timestamp NOT NULL,
+fcm_token varchar(255)
 );
 
 CREATE TABLE tag (

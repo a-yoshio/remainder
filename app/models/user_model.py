@@ -12,6 +12,7 @@ class UserModel(db.Model):
     password = db.Column(db.String(255), null_able=False)
     mail_address = db.Column(db.String(255), null_able=False)
     last_login = db.Column(db.DateTime)
+    fcm_token = db.Column(db.String(255), null_able=True)
 
 
     def to_dict(self):
@@ -28,6 +29,9 @@ class UserModel(db.Model):
         self.name = form.name
         if form.id != 0:
             self.id = form.id
+
+    def update_fcm_token(self, new_fcm_token):
+        self.fcm_token = new_fcm_token
 
     def update_last_login_date(self):
         self.last_login = datetime.now()

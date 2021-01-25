@@ -24,3 +24,15 @@ class UserRepository():
         except BaseException as e:
             db.session.rollback()
             raise e
+
+    def update_fcm_token(self, user_id: int, fcm_token):
+        try:
+            print('start fcm token update')
+            user_model = db.session.query(UserModel).filter_by(id=user_id).first()
+            user_model.update_fcm_token(fcm_token)
+            db.session.add(user_model)
+            db.session.commit()
+            return True, 'update fcm_token success'
+        except BaseException as e:
+            db.session.rollback()
+            raise e
